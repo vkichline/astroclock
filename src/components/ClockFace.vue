@@ -17,15 +17,26 @@ export default {
     let t = new Date()
     return {
       time: t,
-      parts: this.getTimeParts(t)
+      parts: this.getTimeParts(t),
+      timer: null
     }
   },
   computed: {
-    hhmm: function () { return this.parts.hhmm },
-    ss: function () { return this.parts.ss },
-    suffix: function () { return this.parts.suffix },
-    dow: function () { return this.parts.dow },
-    mdy: function () { return this.parts.mdy }
+    hhmm: function () { return this.getTimeParts(this.time).hhmm },
+    ss: function () { return this.getTimeParts(this.time).ss },
+    suffix: function () { return this.getTimeParts(this.time).suffix },
+    dow: function () { return this.getTimeParts(this.time).dow },
+    mdy: function () { return this.getTimeParts(this.time).mdy }
+  },
+  mounted () {
+    this.timer = window.setInterval(() => {
+      this.time = new Date()
+    }, 1000)
+  },
+  beforeDestroy () {
+    if (this.timer) {
+      window.clearTimeout(this.timer)
+    }
   },
   methods: {
     getTimeParts (time) {
