@@ -67,9 +67,8 @@ export default {
 }
 </script>
 
-<style scoped>
-clock-face {
-    font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
+<style lang="scss" scoped>
+.clock-face {
     text-align: center;
 }
 
@@ -77,6 +76,7 @@ clock-face {
     display: inline-block;
     font-size: 600%;
     font-weight: bold;
+    color: inherit;
 }
 
 .clock-face .dow {
