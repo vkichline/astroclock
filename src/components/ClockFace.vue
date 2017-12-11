@@ -69,13 +69,14 @@ export default {
 
 <style scoped>
 clock-face {
-    font-family: sans-serif;
+    font-family: "Lucida Sans Typewriter", "Lucida Console", Monaco, "Bitstream Vera Sans Mono", monospace;
     text-align: center;
 }
 
 .clock-face .time {
     display: inline-block;
     font-size: 600%;
+    font-weight: bold;
 }
 
 .clock-face .dow {
@@ -90,10 +91,10 @@ clock-face {
 
 .right-box {
     display: inline-block;
+    font-weight: bold;
     text-align: left;
-    font-size: 230%;
+    font-size: 220%;
     width: 2em;
-    margin-left: .1em;
 }
 
 .clock-face .seconds {
