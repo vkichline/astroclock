@@ -1,11 +1,12 @@
 <template>
   <div id="app">
     <div class="empty"></div>
-    <router-view/>
+    <ClockFace/>
   </div>
 </template>
 
 <script>
+import ClockFace from './components/ClockFace'
 export default {
   name: 'app',
   data () {
@@ -13,11 +14,14 @@ export default {
       timer: null
     }
   },
+  components: {
+    ClockFace
+  },
   mounted () {
     this.timer = window.setInterval(() => {
-      this.refreshBackground()
-    }, 300000)
-    this.refreshBackground()
+      this.refreshOffscreen()
+    }, 15000)
+    this.refreshOffscreen()
   },
   beforeDestroy () {
     if (this.time) {
@@ -31,12 +35,23 @@ export default {
       let minutes = now.getUTCMinutes()
       return hours.toString() + ':' + (minutes < 10 ? '0' + minutes.toString() : minutes.toString())
     },
-    refreshBackground: function () {
+    makeImgUrl: function () {
       let utcTime = this.getTimeString()
-      let url = 'http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=' + utcTime
+      return 'http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=' + utcTime
+    },
+    refreshOffscreen: function () {
+      console.log('refreshOffscreen')
+      let img = new Image()
+      if (img) {
+        img.src = this.makeImgUrl()
+        img.loadend = this.refreshBackground(img)
+      }
+    },
+    refreshBackground: function (img) {
+      console.log('refreshBackground; img.src = ', img.src)
       let appElem = document.getElementById('app')
       if (appElem) {
-        appElem.style.backgroundImage = 'url(' + url + ')'
+        appElem.style.backgroundImage = 'url(' + img.src + ')'
       }
     }
   }
