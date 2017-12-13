@@ -1,17 +1,20 @@
 <template>
-  <div id="app">
+  <div id="world">
     <img id="bg1" class="bottom" scr="#" />
     <img id="bg2" class="bottom" scr="#" />
     <div class="content">
         <ClockFace/>
+        <MoonPhase/>
     </div>
   </div>
 </template>
 
 <script>
 import ClockFace from './ClockFace'
+import MoonPhase from './MoonPhase'
+
 export default {
-  name: 'app',
+  name: 'World',
   data () {
     return {
       timer: null,
@@ -21,7 +24,8 @@ export default {
     }
   },
   components: {
-    ClockFace
+    ClockFace,
+    MoonPhase
   },
   mounted () {
     this.phase = true
@@ -33,7 +37,7 @@ export default {
     this.periodic()
   },
   beforeDestroy () {
-    if (this.time) {
+    if (this.timer) {
       window.clearTimeout(this.timer)
     }
   },
