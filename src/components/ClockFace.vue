@@ -68,32 +68,38 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+
+$fontsize: 400%;
+
 .clock-face {
+  font-family: sans-serif;
     text-align: center;
+    color: white;
+    margin-top: 1em;
 }
 
 .clock-face .time {
     display: inline-block;
-    font-size: 600%;
+    font-size: $fontsize;
     font-weight: bold;
     color: inherit;
 }
 
 .clock-face .dow {
     display: block;
-    font-size: 200%;
+    font-size: $fontsize/3.33;
 }
 
 .clock-face .mdy {
     display: block;
-    font-size: 150%;
+    font-size: $fontsize/3.33%;
 }
 
 .right-box {
     display: inline-block;
     font-weight: bold;
     text-align: left;
-    font-size: 220%;
+    font-size: $fontsize/2.5;
     width: 2em;
 }
 
