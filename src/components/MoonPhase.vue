@@ -13,7 +13,7 @@ export default {
     }
   },
   mounted () {
-    this.timer = setInterval(this.refreshMoonImage, 1000 * 60 * 1)
+    this.timer = setInterval(this.refreshMoonImage, 1000 * 60 * 60)
     this.refreshMoonImage()
   },
   beforeDestroy () {
