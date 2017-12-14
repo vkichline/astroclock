@@ -120,10 +120,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../_globals.scss";
 
 .weather-status {
   font-family: sans-serif;
-  color: white;
+  color: $fgcolor;
   font-size: 300%;
   margin-top: .5em;
   opacity: 0.75;

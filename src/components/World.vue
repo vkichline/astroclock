@@ -74,11 +74,10 @@ export default {
 </script>
 
 <style lang="scss">
-$horz: 1600px;
-$vert: 900px;
+@import "../_globals.scss";
 
 #bg1 {
-    background-color: black;
+    background-color: $bgcolor;
     position: absolute;
     top: 0;
     left: 0;
@@ -87,7 +86,7 @@ $vert: 900px;
 }
 
 #bg2 {
-    background-color: black;
+    background-color: $bgcolor;
     position: absolute;
     top: 0;
     left: 0;

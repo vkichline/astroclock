@@ -38,8 +38,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$horz: 1600px;
-$vert: 900px;
+@import "../_globals.scss";
+
 $size: 5em;
 $curve: 1em;
 $gap: .5em;
@@ -48,7 +48,7 @@ $gap: .5em;
   position: absolute;
   top: $vert - 420px;
   left: $gap;
-  background-color: black;
+  background-color: $bgcolor;
   height: $size;
   width: $size;
   border-radius: $curve;

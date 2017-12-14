@@ -68,13 +68,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import "../_globals.scss";
 
 $fontsize: 400%;
 
 .clock-face {
   font-family: sans-serif;
     text-align: center;
-    color: white;
+    color: $fgcolor;
     margin-top: 1em;
 }
 
