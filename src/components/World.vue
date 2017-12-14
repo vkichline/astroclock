@@ -34,10 +34,12 @@ export default {
     this.phase = true
     this.bg1 = document.getElementById('bg1')
     this.bg2 = document.getElementById('bg2')
-    this.bg1.addEventListener('load', this.change)
-    this.bg2.addEventListener('load', this.change)
-    this.timer = setInterval(this.periodic, 1000 * 60 * 15)
-    this.periodic()
+    if (this.bg1 && this.bg2) {
+      this.bg1.addEventListener('load', this.change)
+      this.bg2.addEventListener('load', this.change)
+      this.timer = setInterval(this.periodic, 1000 * 60 * 15)
+      this.periodic()
+    }
   },
   beforeDestroy () {
     if (this.timer) {
@@ -61,12 +63,14 @@ export default {
     },
     change: function () {
       this.phase = !this.phase
-      if (this.phase) {
-        this.bg2.className = 'top'
-        this.bg1.className = 'bottom'
-      } else {
-        this.bg1.className = 'top'
-        this.bg2.className = 'bottom'
+      if (this.bg1 && this.bg2) {
+        if (this.phase) {
+          this.bg2.className = 'top'
+          this.bg1.className = 'bottom'
+        } else {
+          this.bg1.className = 'top'
+          this.bg2.className = 'bottom'
+        }
       }
     }
   }
