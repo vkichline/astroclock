@@ -23,7 +23,6 @@ export default {
   },
   methods: {
     refreshMoonImage () {
-      console.log('z')
       let elem = document.getElementById('moonPhaseImage')
       if (elem) {
         let now = new Date()

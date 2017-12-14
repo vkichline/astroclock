@@ -1,6 +1,6 @@
 <template>
   <div class="weather-status">
-    <div class="temperature">41&deg;</div>
+    <div class="temperature">{{ temp }}&deg;</div>
     <div class="forecast cloudy"></div>
   </div>
 </template>
@@ -10,7 +10,46 @@ export default {
   name: 'WeatherStatus',
   data () {
     return {
-      timer: null
+      timer: null,
+      temp: '?'
+    }
+  },
+  mounted () {
+    this.timer = setInterval(this.refreshForecast, 1000 * 60 * 60)
+    this.refreshForecast()
+  },
+  beforeDestroy () {
+    if (this.timer) {
+      window.clearTimeout(this.timer)
+    }
+  },
+  methods: {
+    getForecast: function (cb) {
+      let statement = 'select * from weather.forecast where woeid=' + '2433074'
+      let url = 'https://query.yahooapis.com/v1/public/yql?format=json&q=' + statement
+
+      let request = new XMLHttpRequest()
+      request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE) {
+          if (request.status === 200) {
+            let response = JSON.parse(request.response)
+            let results = response.query.results
+            cb(results)
+          }
+        } else {
+          // Return the initial weather forecast since no data is available.
+        }
+      }
+      request.open('GET', url)
+      request.send()
+    },
+
+    refreshForecast: function () {
+      let that = this
+      this.getForecast(function (data) {
+        that.temp = data.channel.item.condition.temp
+        console.log(this.temp)
+      })
     }
   }
 }
@@ -23,6 +62,7 @@ export default {
   color: white;
   font-size: 300%;
   margin-top: .5em;
+  opacity: 0.65;
 }
 
 .weather-status .temperature {
