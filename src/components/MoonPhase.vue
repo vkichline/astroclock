@@ -40,8 +40,8 @@ export default {
 <style lang="scss" scoped>
 $horz: 1600px;
 $vert: 900px;
-$size: 6em;
-$curve: 1.5em;
+$size: 5em;
+$curve: 1em;
 $gap: .5em;
 
 .moon-phase  {
@@ -53,7 +53,6 @@ $gap: .5em;
   width: $size;
   border-radius: $curve;
   overflow: hidden;
-  opacity: 0.85;
 }
 
 .moon-phase #moonPhaseImage {

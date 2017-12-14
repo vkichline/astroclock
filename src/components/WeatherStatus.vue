@@ -126,7 +126,7 @@ export default {
   color: white;
   font-size: 300%;
   margin-top: .5em;
-  opacity: 0.65;
+  opacity: 0.75;
 }
 
 .weather-status .temperature {
