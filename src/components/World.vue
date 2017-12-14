@@ -4,6 +4,7 @@
     <img id="bg2" class="bottom" scr="#" />
     <div class="content">
         <ClockFace/>
+        <WeatherStatus/>
         <MoonPhase/>
     </div>
   </div>
@@ -12,6 +13,7 @@
 <script>
 import ClockFace from './ClockFace'
 import MoonPhase from './MoonPhase'
+import WeatherStatus from './WeatherStatus'
 
 export default {
   name: 'World',
@@ -25,7 +27,8 @@ export default {
   },
   components: {
     ClockFace,
-    MoonPhase
+    MoonPhase,
+    WeatherStatus
   },
   mounted () {
     this.phase = true

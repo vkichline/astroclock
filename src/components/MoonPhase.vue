@@ -42,25 +42,26 @@ export default {
 $horz: 1600px;
 $vert: 900px;
 $size: 6em;
-$curve: 1em;
+$curve: 1.5em;
 $gap: .5em;
 
 .moon-phase  {
-    position: absolute;
-    top: $vert - 420px;
-    left: $gap;
-    background-color: black;
-    height: $size;
-    width: $size;
-    border-radius: $curve;
-    overflow: hidden;
+  position: absolute;
+  top: $vert - 420px;
+  left: $gap;
+  background-color: black;
+  height: $size;
+  width: $size;
+  border-radius: $curve;
+  overflow: hidden;
+  opacity: 0.85;
 }
 
 .moon-phase #moonPhaseImage {
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: 150%;
-    height: $size;
-    width: $size;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 150%;
+  height: $size;
+  width: $size;
 }
 </style>
