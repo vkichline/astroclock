@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Canvas Sky Clock</title>
+  <style>
+    #sky-clock {
+      border: 1px solid gray;
+      border-radius: 200px;
+    }
+    #time-display {
+      text-align: center;
+      width: 400px;
+      margin-top: 1em;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="sky-clock" height="400" width="400"></canvas>
+  <div id="time-display"></div>
+  <script>
+  (function() {
+    let canvas = document.getElementById('sky-clock');
+    let ctx = canvas.getContext("2d");
+    let centerX = 186;
+    let centerY = 208;
+    let drawClockFace = function () {
+      ctx.font = "24px Arial";
+      let items = 24, r = 180;
+      for(let i = 0; i < items; i++) {
+        let x = centerX + r * Math.cos(2 * Math.PI * i / items);
+        let y = centerY + r * Math.sin(2 * Math.PI * i / items);   
+        ctx.fillText((i+18)%24, x, y);
+      }
+    }
+    let drawTime = function (time) {
+      let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
+      part = (part + 0.25) % 1;
+      let x = centerX + 220 * Math.cos(2.0 * Math.PI * part);
+      let y = centerY + 220 * Math.sin(2.0 * Math.PI * part);
+      ctx.moveTo(centerX, centerY);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+    let sleep = function (delay) {
+      var start = new Date().getTime();
+      while (new Date().getTime() < start + delay);
+    }
+
+    let d = new Date(2017, 11, 14, 0, 0, 0, 0);
+    let that = this;
+    let display = document.getElementById('time-display');
+    drawClockFace();
+    setInterval(function () {
+      display.innerText = d.toTimeString();
+      drawTime(d);
+      d.setMinutes(d.getMinutes() + 15);
+    }, 250);
+  })();
+  </script>
+</body>
+</html>
