@@ -6,6 +6,9 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Canvas Sky Clock</title>
   <style>
+    body {
+      margin: 1em;
+    }
     #sky-clock {
       border: 1px solid gray;
       border-radius: 200px;
@@ -26,38 +29,54 @@
     let ctx = canvas.getContext("2d");
     let centerX = 186;
     let centerY = 208;
+
     let drawClockFace = function () {
       ctx.font = "24px Arial";
       let items = 24, r = 180;
       for(let i = 0; i < items; i++) {
-        let x = centerX + r * Math.cos(2 * Math.PI * i / items);
-        let y = centerY + r * Math.sin(2 * Math.PI * i / items);   
+        // The - 0.04 is to center the number on the point
+        let x = centerX + r * Math.cos(2 * Math.PI * i / items - 0.04);
+        let y = centerY + r * Math.sin(2 * Math.PI * i / items - 0.04);   
         ctx.fillText((i+18)%24, x, y);
       }
     }
-    let drawTime = function (time) {
-      let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
-      part = (part + 0.25) % 1;
-      let x = centerX + 220 * Math.cos(2.0 * Math.PI * part);
-      let y = centerY + 220 * Math.sin(2.0 * Math.PI * part);
-      ctx.moveTo(centerX, centerY);
-      ctx.lineTo(x, y);
+
+    let drawLines = function () {
+      ctx.beginPath();
+      ctx.strokeStyle = '#ccc';
+      let items = 24, r = 150;
+      for(let i = 0; i < items; i++) {
+        let x = 200 + r * Math.cos(2 * Math.PI * i / items);
+        let y = 200 + r * Math.sin(2 * Math.PI * i / items);   
+        ctx.moveTo(200,200);
+        ctx.lineTo(x ,y);
+      }
       ctx.stroke();
-    }
-    let sleep = function (delay) {
-      var start = new Date().getTime();
-      while (new Date().getTime() < start + delay);
+      ctx.closePath();
     }
 
-    let d = new Date(2017, 11, 14, 0, 0, 0, 0);
+    let drawTime = function (time, color) {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 3;
+      let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
+      part = (part + 0.25) % 1;
+      let x = 200 + 220 * Math.cos(2.0 * Math.PI * part);
+      let y = 200 + 220 * Math.sin(2.0 * Math.PI * part);
+      ctx.moveTo(200, 200);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+      ctx.closePath();
+    }
+
+    let d = new Date();
     let that = this;
     let display = document.getElementById('time-display');
+    drawLines();
+    drawTime(d, 'rgba(255, 0, 0, 0.4)');
+    drawTime(new Date(Date.UTC(d.getFullYear(), d.getMonth(),
+      d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds())), 'rgba(0, 0, 255, 0.4)');
     drawClockFace();
-    setInterval(function () {
-      display.innerText = d.toTimeString();
-      drawTime(d);
-      d.setMinutes(d.getMinutes() + 15);
-    }, 250);
   })();
   </script>
 </body>
