@@ -110,7 +110,6 @@ export default {
     refreshForecast: function () {
       let that = this
       this.getForecast(function (data) {
-        console.log('xyzzy')
         that.fcast = 'forecast ' + that.getIconClass(data.channel.item.condition.code)
         that.temp = data.channel.item.condition.temp
       })

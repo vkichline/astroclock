@@ -17,7 +17,6 @@ describe('ClockFace.vue', () => {
     const vm = new Constructor().$mount()
     let now = new Date(2017, 11, 14, 14, 54, 3, 0)
     let t = vm.getTimeParts(now)
-    console.log(t.mdy)
     expect(Object.keys(t).length).toBe(7)
     expect(t.hhmm).toEqual('2:54')
     expect(t.ss).toEqual('03')

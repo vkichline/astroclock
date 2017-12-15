@@ -27,32 +27,39 @@
   (function() {
     let canvas = document.getElementById('sky-clock');
     let ctx = canvas.getContext("2d");
-    let centerX = 186;
-    let centerY = 208;
+    let centerX = 200;
+    let centerY = 200;
 
-    let drawClockFace = function () {
+    let drawClockFace = function (color) {
+      ctx.beginPath();
+      let x0 = 186;
+      let y0 = 208;
       ctx.font = "24px Arial";
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
       let items = 24, r = 180;
       for(let i = 0; i < items; i++) {
         // The - 0.04 is to center the number on the point
-        let x = centerX + r * Math.cos(2 * Math.PI * i / items - 0.04);
-        let y = centerY + r * Math.sin(2 * Math.PI * i / items - 0.04);   
+        let x = x0 + r * Math.cos(2 * Math.PI * i / items - 0.04);
+        let y = y0 + r * Math.sin(2 * Math.PI * i / items - 0.04);   
         ctx.fillText((i+18)%24, x, y);
       }
+      ctx.closePath();
     }
 
     let drawLines = function () {
       ctx.beginPath();
       ctx.strokeStyle = '#ccc';
-      let items = 24, r = 150;
+      ctx.lineWidth = 1;
+      let items = 24, r = 160;
       for(let i = 0; i < items; i++) {
-        let x = 200 + r * Math.cos(2 * Math.PI * i / items);
-        let y = 200 + r * Math.sin(2 * Math.PI * i / items);   
-        ctx.moveTo(200,200);
+        let x = centerX + r * Math.cos(2 * Math.PI * i / items);
+        let y = centerY + r * Math.sin(2 * Math.PI * i / items);   
+        ctx.moveTo(centerX, centerY);
         ctx.lineTo(x ,y);
       }
       ctx.stroke();
-      ctx.closePath();
+      
     }
 
     let drawTime = function (time, color) {
@@ -61,22 +68,81 @@
       ctx.lineWidth = 3;
       let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
       part = (part + 0.25) % 1;
-      let x = 200 + 220 * Math.cos(2.0 * Math.PI * part);
-      let y = 200 + 220 * Math.sin(2.0 * Math.PI * part);
-      ctx.moveTo(200, 200);
+      let x = centerX + 220 * Math.cos(2.0 * Math.PI * part);
+      let y = centerY + 220 * Math.sin(2.0 * Math.PI * part);
+      ctx.moveTo(centerX, centerY);
       ctx.lineTo(x, y);
       ctx.stroke();
       ctx.closePath();
     }
 
-    let d = new Date();
-    let that = this;
-    let display = document.getElementById('time-display');
+    let drawWedge = function (start, end, r, color) {
+      ctx.beginPath();
+      ctx.strokeStyle = color;
+      ctx.fillStyle = color;
+      ctx.lineWidth = 1;
+      let startAngle = (start.getHours() * 60.0 + start.getMinutes()) / 1440.0;
+      startAngle = (startAngle + 0.25) % 1;
+      let endAngle = (end.getHours() * 60.0 + end.getMinutes()) / 1440.0;
+      endAngle = (endAngle + 0.25) % 1;
+      ctx.moveTo(centerX, centerY);
+      let x = centerX + r * Math.cos(2.0 * Math.PI * startAngle);
+      let y = centerY + r * Math.sin(2.0 * Math.PI * startAngle);
+      ctx.lineTo(x, y);
+      ctx.arc(centerX, centerY, r, startAngle * 2.0 * Math.PI, endAngle * 2.0 * Math.PI);
+      ctx.lineTo(centerX, centerY);
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    let drawInfo = function (time, sidTime, moonRise, moonSet, soct, sunRise, sunSet, eoct) {
+      drawWedge(soct, sunRise, 140, '#eee');
+      drawWedge(sunRise, sunSet, 140, '#ff0');
+      drawWedge(sunSet, eoct, 140, '#eee');
+      drawWedge(moonRise, moonSet, 100, 'rgba(0, 255, 0, 0.25)');
+      drawTime(time, 'rgba(0, 0, 0, 0.4)');
+      drawTime(sidTime, 'rgba(255, 0, 0, 0.4)');
+    }
+
+    let getSiderialTime = function getForecast (cb) {
+      let url = 'http://api.usno.navy.mil/sidtime?date=today&time=now&loc=Kirkland,%20WA';
+      let request = new XMLHttpRequest();
+      request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE) {
+          if (request.status === 200) {
+            let response = JSON.parse(request.response);
+            let results = response.properties.data[0];
+            let sid = results.last;
+            let parts = sid.split('.');
+            let time = parts[0];
+            parts = time.split(':');
+            let date = new Date(results.year, results.month - 1, results.day, parts[0], parts[1], parts[2]);
+            cb(date)
+          }
+        } else {
+          // Return the initial weather forecast since no data is available.
+        }
+      }
+      request.open('GET', url)
+      request.send()
+    }
+
     drawLines();
-    drawTime(d, 'rgba(255, 0, 0, 0.4)');
-    drawTime(new Date(Date.UTC(d.getFullYear(), d.getMonth(),
-      d.getDate(), d.getHours(), d.getMinutes(), d.getSeconds())), 'rgba(0, 0, 255, 0.4)');
-    drawClockFace();
+    drawClockFace('#000');
+    getSiderialTime(function (sidTime) {
+      let d = new Date();
+      let mRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 4, 4);
+      let mSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 14, 42);
+      let soct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 14);
+      let sRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 50);
+      let sSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 17);
+      let eoct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 53);
+
+      let display = document.getElementById('time-display');
+      drawInfo(d, sidTime, mRise, mSet, soct, sRise, sSet, eoct)
+      drawLines();
+      drawClockFace('#000');
+    });
   })();
   </script>
 </body>
