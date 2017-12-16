@@ -15,23 +15,23 @@
     }
     #sky-clock {
       border: 1px solid gray;
-      border-radius: 200px;
+      border-radius: 120px;
     }
     #time-display {
       text-align: center;
-      width: 400px;
+      width: 240px;
       margin-top: 1em;
     }
   </style>
 </head>
 <body>
-  <canvas id="sky-clock" height="400" width="400"></canvas>
+  <canvas id="sky-clock" height="240" width="240"></canvas>
   <div id="time-display"></div>
   <script>
   (function() {
     let canvas = document.getElementById('sky-clock');
     let ctx = canvas.getContext("2d");
-    let size = 400;
+    let size = 240;
     let centerX = size / 2;
     let centerY = size / 2;
 
@@ -43,7 +43,7 @@
      ctx.beginPath();
       let x0 = (size / 2) * 0.95;
       let y0 =(size / 2) * 1.03;
-      ctx.font = "18px Arial";
+      ctx.font = "12px Arial";
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
       let items = 24;
