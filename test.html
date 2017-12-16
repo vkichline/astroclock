@@ -117,13 +117,11 @@
       ctx.closePath();
     }
 
-    let drawInfo = function (time, sidTime, moonRise, moonSet, soct, sunRise, sunSet, eoct) {
+    let drawSunMoonInfo = function (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
       drawWedge(soct, sunRise, 140, '#eee');
       drawWedge(sunRise, sunSet, 140, '#ff0');
       drawWedge(sunSet, eoct, 140, '#eee');
-      drawWedge(moonRise, moonSet, 100, 'rgba(0, 255, 0, 0.25)');
-      drawTime(time, 'rgb(255, 0, 0)', 3);
-      drawTime(sidTime, 'rgb(0, 0, 255)', 1);
+      drawWedge(moonRise, moonSet, 100, 'rgba(0, 255, 0, 0.5)');
     }
 
     let getSiderialTime = function (cb) {
@@ -196,32 +194,21 @@
       request.send()
     }
 
-
     drawLines();
     drawClockFace('#000');
     let now = new Date();
+    drawTime(now, 'rgb(255, 0, 0)', 3);
+
     getSunMoonData(now, function (data) {
       let display = document.getElementById('time-display');
-      // Siderial time not included!
-      drawInfo(now, now, data[0], data[2], data[3], data[4], data[6], data[7]);
+      drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7]);
       drawLines();
       drawClockFace('#000');
      });
 
-    // getSiderialTime(function (sidTime) {
-    //   let d = new Date();
-    //   let mRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 4, 4);
-    //   let mSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 14, 42);
-    //   let soct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 14);
-    //   let sRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 50);
-    //   let sSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 17);
-    //   let eoct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 53);
-
-    //   let display = document.getElementById('time-display');
-    //   drawInfo(d, sidTime, mRise, mSet, soct, sRise, sSet, eoct)
-    //   drawLines();
-    //   drawClockFace('#000');
-    // });
+    getSiderialTime(function (sidTime) {
+      drawTime(sidTime, 'rgb(0, 0, 255)', 1);
+     });
   })();
   </script>
 </body>
