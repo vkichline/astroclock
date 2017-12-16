@@ -6,6 +6,7 @@
         <ClockFace/>
         <WeatherStatus/>
         <MoonPhase/>
+        <SkyClock/>
     </div>
   </div>
 </template>
@@ -14,6 +15,7 @@
 import ClockFace from './ClockFace'
 import MoonPhase from './MoonPhase'
 import WeatherStatus from './WeatherStatus'
+import SkyClock from './SkyClock'
 
 export default {
   name: 'World',
@@ -28,7 +30,8 @@ export default {
   components: {
     ClockFace,
     MoonPhase,
-    WeatherStatus
+    WeatherStatus,
+    SkyClock
   },
   mounted () {
     this.phase = true
@@ -86,7 +89,7 @@ export default {
     top: 0;
     left: 0;
     width: $horz;
-    height: vert;
+    height: $vert;
 }
 
 #bg2 {
@@ -95,7 +98,7 @@ export default {
     top: 0;
     left: 0;
     width: $horz;
-    height: vert;
+    height: $vert;
 }
 
 .bottom {
@@ -112,7 +115,7 @@ export default {
     top: 0;
     left: 0;
     width: $horz;
-    height: vert;
+    height: $vert;
     z-index: 3;
     font-size: 300%;
     text-align: center;

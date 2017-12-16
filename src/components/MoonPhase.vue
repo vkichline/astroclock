@@ -42,12 +42,11 @@ export default {
 
 $size: 5em;
 $curve: 1em;
-$gap: .5em;
 
 .moon-phase  {
   position: absolute;
-  top: $vert - 420px;
   left: $gap;
+  bottom: $gap;
   background-color: $bgcolor;
   height: $size;
   width: $size;
