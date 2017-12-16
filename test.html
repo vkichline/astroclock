@@ -31,8 +31,9 @@
   (function() {
     let canvas = document.getElementById('sky-clock');
     let ctx = canvas.getContext("2d");
-    let centerX = 200;
-    let centerY = 200;
+    let size = 400;
+    let centerX = size / 2;
+    let centerY = size / 2;
 
     let drawClockFace = function (color) {
       let fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005,  // 18 - 23
@@ -40,18 +41,18 @@
                   0.0, 0.005, 0.01, 0.015, 0.0, 0.0,  // 6 - 11
                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // 12 - 17
      ctx.beginPath();
-      let x0 = 190;
-      let y0 = 206;
+      let x0 = (size / 2) * 0.95;
+      let y0 =(size / 2) * 1.03;
       ctx.font = "18px Arial";
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
       let items = 24;
-      let r = 180;
+      let r = (size / 2) * 0.9;
       for(let i = 0; i < items; i++) {
         // fudge factor gets numbers properyly aligned...
         let x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i]);
         let y = y0 + r * Math.sin(2 * Math.PI * i / items + fudge[i]);   
-        ctx.fillText((i+18)%24, x, y);
+        ctx.fillText((i + (items * 3 / 4)) % items, x, y);
       }
       ctx.closePath();
     }
@@ -62,7 +63,7 @@
       ctx.lineWidth = 1;
       // draw a long line for each hour
       let items = 24;
-      let r = 160;
+      let r = (size / 2) * 0.8;
       for(let i = 0; i < items; i++) {
         let x = centerX + r * Math.cos(2 * Math.PI * i / items);
         let y = centerY + r * Math.sin(2 * Math.PI * i / items);   
@@ -71,8 +72,8 @@
       }
       // draw a short outer tick for every 15 minutes
       items *= 4;
-      let r1 = 195;
-      let r2 = 200;
+      let r1 = (size / 2) * 0.975;
+      let r2 = (size / 2);
       for(i = 0; i < items; i++) {
         let xStart = centerX + r1 * Math.cos(2 * Math.PI * i / items);
         let yStart = centerY + r1 * Math.sin(2 * Math.PI * i / items);   
@@ -89,9 +90,10 @@
       ctx.strokeStyle = color;
       ctx.lineWidth = width;
       let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
+      let r = (size / 2) * 1.1;
       part = (part + 0.25) % 1;
-      let x = centerX + 220 * Math.cos(2.0 * Math.PI * part);
-      let y = centerY + 220 * Math.sin(2.0 * Math.PI * part);
+      let x = centerX + r * Math.cos(2.0 * Math.PI * part);
+      let y = centerY + r * Math.sin(2.0 * Math.PI * part);
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(x, y);
       ctx.stroke();
@@ -118,10 +120,11 @@
     }
 
     let drawSunMoonInfo = function (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
-      drawWedge(soct, sunRise, 140, '#eee');
-      drawWedge(sunRise, sunSet, 140, '#ff0');
-      drawWedge(sunSet, eoct, 140, '#eee');
-      drawWedge(moonRise, moonSet, 100, 'rgba(0, 255, 0, 0.5)');
+      let r = (size / 2) * 0.7;
+      drawWedge(soct, sunRise, r, '#eee');
+      drawWedge(sunRise, sunSet, r, '#ff0');
+      drawWedge(sunSet, eoct, r, '#eee');
+      drawWedge(moonRise, moonSet,  (size / 4), 'rgba(0, 255, 0, 0.5)');
     }
 
     let getSiderialTime = function (cb) {
