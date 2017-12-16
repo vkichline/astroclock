@@ -126,8 +126,8 @@
       drawTime(sidTime, 'rgb(0, 0, 255)', 1);
     }
 
-    let getSiderialTime = function getForecast (cb) {
-      let url = 'http://api.usno.navy.mil/sidtime?date=today&time=now&loc=Kirkland,%20WA';
+    let getSiderialTime = function (cb) {
+      let url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=today&time=now&loc=Kirkland,%20WA';
       let request = new XMLHttpRequest();
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
@@ -141,13 +141,61 @@
             let date = new Date(results.year, results.month - 1, results.day, parts[0], parts[1], parts[2]);
             cb(date)
           }
-        } else {
-          // Return the initial weather forecast since no data is available.
         }
       }
       request.open('GET', url)
       request.send()
     }
+
+    // API Sun/Moon data always refers to today, and time is
+    // (unfortunately) expressed in strings like "7:16 a.m. ST".
+    // Supply a date object for today so we don't have to create
+    // Date objects over ands over, and a string to convert.
+    // Return a Date object for the string.
+    let getDateFromSunMoonData = function (today, data) {
+      let parts = data.split(/[: ]/);
+      let hours = parseInt(parts[0], 10);
+      let minutes = parseInt(parts[1], 10);
+      if (parts[2] === 'p.m.') { hours += 12; }
+      return new Date(today.getFullYear(), today.getMonth(),
+        today.getDate(), hours, minutes, 0);
+    }
+
+    // Create an array of Date objects, set to:
+    //   [0] = MoonRise
+    //   [1] = MoonTransit
+    //   [2] = MoonSet
+    //   [3] = BeginCivilTwilight
+    //   [4] = SunRise
+    //   [5] = SunTransit
+    //   [6] = SunSet
+    //   [7] = EndCivilTwilight
+    let getSunMoonData = function (cb) {
+      let now = new Date();
+      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=today&loc=Kirkland,%20WA';
+      let request = new XMLHttpRequest();
+      request.onreadystatechange = function () {
+        if (request.readyState === XMLHttpRequest.DONE) {
+          if (request.status === 200) {
+            let response = JSON.parse(request.response);
+            let results = [];
+            results[0] = getDateFromSunMoonData(now, response.moondata[0].time);
+            results[1] = getDateFromSunMoonData(now, response.moondata[1].time);
+            results[2] = getDateFromSunMoonData(now, response.moondata[2].time);
+            results[3] = getDateFromSunMoonData(now, response.sundata[0].time);
+            results[4] = getDateFromSunMoonData(now, response.sundata[1].time);
+            results[5] = getDateFromSunMoonData(now, response.sundata[2].time);
+            results[6] = getDateFromSunMoonData(now, response.sundata[3].time);
+            results[7] = getDateFromSunMoonData(now, response.sundata[4].time);
+            cb(results)
+          }
+        }
+      }
+      request.open('GET', url)
+      request.send()
+    }
+
+    getSunMoonData(null);
 
     drawLines();
     drawClockFace('#000');
