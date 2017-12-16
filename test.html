@@ -170,8 +170,9 @@
     //   [5] = SunTransit
     //   [6] = SunSet
     //   [7] = EndCivilTwilight
-    let getSunMoonData = function (cb) {
-      let now = new Date();
+    //  'now' is a Date object for today; all results are for today,
+    //  the param reduces calls to new Date().
+    let getSunMoonData = function (now, cb) {
       let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=today&loc=Kirkland,%20WA';
       let request = new XMLHttpRequest();
       request.onreadystatechange = function () {
@@ -195,24 +196,32 @@
       request.send()
     }
 
-    getSunMoonData(null);
 
     drawLines();
     drawClockFace('#000');
-    getSiderialTime(function (sidTime) {
-      let d = new Date();
-      let mRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 4, 4);
-      let mSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 14, 42);
-      let soct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 14);
-      let sRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 50);
-      let sSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 17);
-      let eoct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 53);
-
+    let now = new Date();
+    getSunMoonData(now, function (data) {
       let display = document.getElementById('time-display');
-      drawInfo(d, sidTime, mRise, mSet, soct, sRise, sSet, eoct)
+      // Siderial time not included!
+      drawInfo(now, now, data[0], data[2], data[3], data[4], data[6], data[7]);
       drawLines();
       drawClockFace('#000');
-    });
+     });
+
+    // getSiderialTime(function (sidTime) {
+    //   let d = new Date();
+    //   let mRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 4, 4);
+    //   let mSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 14, 42);
+    //   let soct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 14);
+    //   let sRise = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 7, 50);
+    //   let sSet = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 17);
+    //   let eoct = new Date(d.getFullYear(), d.getMonth(), d.getDate(), 16, 53);
+
+    //   let display = document.getElementById('time-display');
+    //   drawInfo(d, sidTime, mRise, mSet, soct, sRise, sSet, eoct)
+    //   drawLines();
+    //   drawClockFace('#000');
+    // });
   })();
   </script>
 </body>
