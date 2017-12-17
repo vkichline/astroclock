@@ -11,7 +11,8 @@
       background-color: silver;
     }
     canvas {
-      background-color: white;
+      background-color: black;
+      color: white;
     }
     #sky-clock {
       border: 1px solid gray;
@@ -57,9 +58,9 @@
       ctx.closePath();
     }
 
-    let drawLines = function () {
+    let drawLines = function (color) {
       ctx.beginPath();
-      ctx.strokeStyle = '#ddd';
+      ctx.strokeStyle = color;
       ctx.lineWidth = 1;
       // draw a long line for each hour
       let items = 24;
@@ -197,16 +198,17 @@
       request.send()
     }
 
-    drawLines();
-    drawClockFace('#000');
+    drawLines('#444');
+    drawClockFace('#fff');
     let now = new Date();
     drawTime(now, 'rgb(255, 0, 0)', 3);
 
     getSunMoonData(now, function (data) {
       let display = document.getElementById('time-display');
       drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7]);
-      drawLines();
-      drawClockFace('#000');
+      drawLines('#444');
+      drawClockFace('#fff');
+      drawTime(now, 'rgb(255, 0, 0)', 3);
      });
 
     getSiderialTime(function (sidTime) {

@@ -28,13 +28,15 @@ export default {
     this.face = document.getElementById('face')
     this.tod = document.getElementById('tod')
     this.sid = document.getElementById('sid')
-    this.size = this.face.clientWidth
-    this.faceTimer = setInterval(this.updateFace, 1000 * 60)
-    this.todTimer = setInterval(this.updateTod, 1000 * 60)
-    this.sidTimer = setInterval(this.updateSid, 1000 * 60)
-    this.updateFace()
-    this.updateTod()
-    this.updateSid()
+    if (this.face && this.tod && this.sid) {
+      this.size = this.face.clientWidth
+      this.faceTimer = setInterval(this.updateFace, 1000 * 60)
+      this.todTimer = setInterval(this.updateTod, 1000 * 60)
+      this.sidTimer = setInterval(this.updateSid, 1000 * 60)
+      this.updateFace()
+      this.updateTod()
+      this.updateSid()
+    }
   },
   beforeDestroy () {
     if (this.timer) {
@@ -42,12 +44,12 @@ export default {
     }
   },
   methods: {
-    drawLines () {
+    drawLines (color) {
       let ctx = this.face.getContext('2d')
       let centerX = this.size / 2
       let centerY = this.size / 2
       ctx.beginPath()
-      ctx.strokeStyle = '#ddd'
+      ctx.strokeStyle = color
       ctx.lineWidth = 1
       // draw a long line for each hour
       let items = 24
@@ -79,13 +81,13 @@ export default {
         0.0, 0.0, 0.0, 0.0, 0.0, 0.0]                     // 12 - 17
       let ctx = this.face.getContext('2d')
       ctx.beginPath()
-      let x0 = (this.size / 2) * 0.95
-      let y0 = (this.size / 2) * 1.03
-      ctx.font = '12px Arial'
+      let x0 = (this.size / 2) * 0.925
+      let y0 = (this.size / 2) * 1.04
+      ctx.font = '16px Arial'
       ctx.strokeStyle = color
       ctx.fillStyle = color
       let items = 24
-      let r = (this.size / 2) * 0.9
+      let r = (this.size / 2) * 0.87
       for (let i = 0; i < items; i++) {
         // fudge factor gets numbers properyly aligned...
         let x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i])
@@ -135,9 +137,9 @@ export default {
     },
     drawSunMoonInfo (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
       let r = (this.size / 2) * 0.7
-      this.drawWedge(soct, sunRise, r, '#eee')
+      this.drawWedge(soct, sunRise, r, '#888')
       this.drawWedge(sunRise, sunSet, r, '#ff0')
-      this.drawWedge(sunSet, eoct, r, '#eee')
+      this.drawWedge(sunSet, eoct, r, '#888')
       this.drawWedge(moonRise, moonSet, (this.size / 4), 'rgba(0, 255, 0, 0.5)')
     },
     getSiderialTime (cb) {
@@ -213,13 +215,13 @@ export default {
       // Redraw the face if the day has changed
       if (now.toDateString() !== this.lastFaceUpdate.toDateString()) {
         this.lastFaceUpdate = now
-        this.drawLines()
+        this.drawLines('#444')
         this.drawClockFace('#000')
         let that = this
         this.getSunMoonData(now, function (data) {
           that.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
-          that.drawLines()
-          that.drawClockFace('#000')
+          that.drawLines('#444')
+          that.drawClockFace('#fff')
         })
       }
     },
@@ -238,7 +240,7 @@ export default {
         this.lastSidUpdate = now
         let that = this
         this.getSiderialTime(function (sidTime) {
-          that.drawTime(that.sid, sidTime, 'rgb(0, 0, 255)', 1)
+          that.drawTime(that.sid, sidTime, 'rgb(0, 255, 255)', 1)
         })
       }
     }
@@ -259,12 +261,12 @@ canvas {
   position: absolute;
   right: 0;
   bottom: 0;
-  border: 1px solid gray;
+  border: 1px solid #444;
   border-radius: 120px;
 }
 
 #face {
-  background-color: $fgcolor;
+  background-color: $bgcolor;
   z-index: 0;
 }
 
