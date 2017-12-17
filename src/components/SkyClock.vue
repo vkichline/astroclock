@@ -138,12 +138,19 @@ export default {
     drawSunMoonInfo (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
       let r = (this.size / 2) * 0.7
       this.drawWedge(soct, sunRise, r, '#888')
-      this.drawWedge(sunRise, sunSet, r, '#ff0')
+      this.drawWedge(sunRise, sunSet, r, '#00f')
       this.drawWedge(sunSet, eoct, r, '#888')
-      this.drawWedge(moonRise, moonSet, (this.size / 4), 'rgba(0, 255, 0, 0.5)')
+      this.drawWedge(moonRise, moonSet, (this.size / 4), 'rgba(255, 0, 0, 0.5)')
+    },
+    // Using 'today' for date uses UTC.  This retruns the string for today,
+    // in a format like: '12/16/2017'.
+    // Uses date supplied, or current date.
+    getDateString (date) {
+      let now = date || new Date()
+      return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     getSiderialTime (cb) {
-      let url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=today&time=now&loc=Kirkland,%20WA'
+      let url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=' + this.getDateString() + '&time=now&loc=Kirkland,%20WA'
       let request = new XMLHttpRequest()
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
@@ -187,7 +194,7 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=today&loc=Kirkland,%20WA'
+      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=' + this.getDateString() + '&loc=Kirkland,%20WA'
       let request = new XMLHttpRequest()
       let that = this
       request.onreadystatechange = function () {
@@ -230,7 +237,7 @@ export default {
       // Redraw the time of day if more than 5 minutes has passed
       if (now - this.lastTodUpdate > 300000) {
         this.lastTodUpdate = now
-        this.drawTime(this.tod, now, 'rgb(255, 0, 0)', 3)
+        this.drawTime(this.tod, now, 'rgb(255, 255, 0)', 3)
       }
     },
     updateSid () {
