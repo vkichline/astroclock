@@ -194,7 +194,7 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=' + this.getDateString() + '&loc=Kirkland,%20WA'
+      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=' + this.getDateString(now) + '&loc=Kirkland,%20WA'
       let request = new XMLHttpRequest()
       let that = this
       request.onreadystatechange = function () {

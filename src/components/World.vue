@@ -119,5 +119,7 @@ export default {
     z-index: 3;
     font-size: 300%;
     text-align: center;
+    overflow: hidden;
+    cursor: none;
 }
 </style>
