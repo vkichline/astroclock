@@ -125,8 +125,10 @@ export default {
   font-family: sans-serif;
   color: $fgcolor;
   font-size: 300%;
-  margin-top: .5em;
-  opacity: 0.75;
+  padding-top: 0.25em;
+  width: 3.5em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .weather-status .temperature {
