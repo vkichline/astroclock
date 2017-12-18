@@ -38,7 +38,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../_globals.scss";
+@import "./_globals.scss";
 
 $size: 5em;
 $curve: 1em;

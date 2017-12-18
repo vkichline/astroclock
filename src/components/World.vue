@@ -81,7 +81,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../_globals.scss";
+@import "./_globals.scss";
 
 #bg1 {
     background-color: $bgcolor;

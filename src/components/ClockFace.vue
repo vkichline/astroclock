@@ -68,7 +68,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "../_globals.scss";
+@import "./_globals.scss";
 
 $fontsize: 400%;
 

@@ -256,7 +256,7 @@ export default {
 </script>
 
 <style lang="scss">
-@import "../_globals.scss";
+@import "./_globals.scss";
 
 #sky-clock {
   position: absolute;
