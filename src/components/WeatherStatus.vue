@@ -37,13 +37,7 @@ export default {
       temp: '?',
       icon: '',
       todaysForecast: '',
-      dailyForecasts: [null, null, null, null, null]
-    }
-  },
-  beforeMount () {
-    for (let i = 0; i < 5; i++) {
-      const day = {day: '?', low: '?', high: '?', icon: 'icon', text: '?'}
-      this.dailyForecasts[i] = day
+      dailyForecasts: [{}, {}, {}, {}, {}]
     }
   },
   mounted () {
@@ -61,6 +55,7 @@ export default {
       const url = `https://query.yahooapis.com/v1/public/yql?format=json&q=${statement}`
 
       const request = new XMLHttpRequest()
+      request.timeout = 5000  // 5 seconds
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
@@ -146,13 +141,15 @@ export default {
         const fc = data.channel.item.forecast[0]
         const forecast = `${fc.text}; Low ${fc.low}°, High ${fc.high}°.`
         that.todaysForecast = forecast
+        let arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
-          that.dailyForecasts[i].day = data.channel.item.forecast[i + 1].day
-          that.dailyForecasts[i].low = data.channel.item.forecast[i + 1].low
-          that.dailyForecasts[i].high = data.channel.item.forecast[i + 1].high
-          that.dailyForecasts[i].icon = `icon ${that.getIconClass(data.channel.item.forecast[i + 1].code)}`
-          that.dailyForecasts[i].text = data.channel.item.forecast[i + 1].text
+          arr[i].day = data.channel.item.forecast[i + 1].day
+          arr[i].low = data.channel.item.forecast[i + 1].low
+          arr[i].high = data.channel.item.forecast[i + 1].high
+          arr[i].icon = `icon ${that.getIconClass(data.channel.item.forecast[i + 1].code)}`
+          arr[i].text = data.channel.item.forecast[i + 1].text
         }
+        that.dailyForecasts = arr
       })
     }
   }

@@ -157,6 +157,7 @@ export default {
     getSiderialTime (cb) {
       const url = `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&loc=Kirkland,%20WA`
       const request = new XMLHttpRequest()
+      request.timeout = 5000 // 5 second timeout
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
@@ -201,6 +202,7 @@ export default {
     getSunMoonData (now, cb) {
       const url = `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString(now)}&loc=Kirkland,%20WA`
       const request = new XMLHttpRequest()
+      request.timeout = 5000 // 5 second timeout
       const that = this
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
