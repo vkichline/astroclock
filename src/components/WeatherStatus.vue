@@ -148,7 +148,7 @@ export default {
         that.temp = data.channel.item.condition.temp
         const fc = data.channel.item.forecast[0]
         const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
-        const forecast = `${fc.text}, Wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
+        const forecast = `${fc.text}, wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
         that.todaysForecast = forecast
         let arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
@@ -171,7 +171,7 @@ export default {
 
 #todays-forecast {
   font-family: sans-serif;
-  font-size: 50%;
+  font-size: 75%;
   color: $fgcolor;
   padding-top: 0.25em;
   margin-left: auto;
@@ -183,7 +183,6 @@ export default {
   font-family: sans-serif;
   color: $fgcolor;
   font-size: 300%;
-  padding-top: 0.25em;
   width: 3.5em;
   height: 1.2em;
   margin-left: auto;
@@ -207,7 +206,7 @@ export default {
 .forecasts {
   margin-left: auto;
   margin-right: auto;
-  margin-top: 1.3em;
+  margin-top: 1em;
   width: 20em;
 }
 </style>
