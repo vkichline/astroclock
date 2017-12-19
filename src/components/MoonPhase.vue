@@ -23,14 +23,14 @@ export default {
   },
   methods: {
     refreshMoonImage () {
-      let elem = document.getElementById('moonPhaseImage')
+      const elem = document.getElementById('moonPhaseImage')
       if (elem) {
-        let now = new Date()
-        let hours = now.getUTCHours()
-        let minutes = now.getUTCMinutes()
-        let utcTime = hours + ':' + (minutes < 10 ? '0' + minutes : minutes)
-        let url = 'http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=' + utcTime
-        elem.style.backgroundImage = 'url(' + url + ')'
+        const now = new Date()
+        const hours = now.getUTCHours()
+        const minutes = now.getUTCMinutes()
+        const utcTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+        const url = `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${utcTime}`
+        elem.style.backgroundImage = `url(${url})`
       }
     }
   }

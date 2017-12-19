@@ -28,16 +28,18 @@ export default {
       temp: '?',
       icon: '',
       todaysForecast: '',
-      dailyForecasts: []
+      dailyForecasts: [null, null, null, null, null]
+    }
+  },
+  beforeMount () {
+    for (let i = 0; i < 5; i++) {
+      const day = {day: '?', low: '?', high: '?', icon: 'icon', text: '?'}
+      this.dailyForecasts[i] = day
     }
   },
   mounted () {
     this.timer = setInterval(this.refreshForecast, 1000 * 60 * 60)
     this.refreshForecast()
-    for (let i = 0; i < 5; i++) {
-      let day = {day: '?', low: '?', high: '?', icon: 'icon', text: '?'}
-      this.dailyForecasts[i] = day
-    }
   },
   beforeDestroy () {
     if (this.timer) {
@@ -46,15 +48,15 @@ export default {
   },
   methods: {
     getForecast: function (cb) {
-      let statement = 'select * from weather.forecast where woeid=' + '2433074'
-      let url = 'https://query.yahooapis.com/v1/public/yql?format=json&q=' + statement
+      const statement = 'select * from weather.forecast where woeid=' + '2433074'
+      const url = `https://query.yahooapis.com/v1/public/yql?format=json&q=${statement}`
 
-      let request = new XMLHttpRequest()
+      const request = new XMLHttpRequest()
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            let response = JSON.parse(request.response)
-            let results = response.query.results
+            const response = JSON.parse(request.response)
+            const results = response.query.results
             cb(results)
           }
         } else {
@@ -128,19 +130,18 @@ export default {
       }
     },
     refreshForecast: function () {
-      let that = this
+      const that = this
       this.getForecast(function (data) {
         that.icon = 'icon ' + that.getIconClass(data.channel.item.condition.code)
         that.temp = data.channel.item.condition.temp
-        let forecast = data.channel.item.forecast[0].text + '; '
-        forecast += 'Low ' + data.channel.item.forecast[0].low + '°, '
-        forecast += 'High ' + data.channel.item.forecast[0].high + '°.'
+        const fc = data.channel.item.forecast[0]
+        const forecast = `${fc.text}; Low ${fc.low}°, High ${fc.high}°.`
         that.todaysForecast = forecast
         for (let i = 0; i < 5; i++) {
           that.dailyForecasts[i].day = data.channel.item.forecast[i + 1].day
           that.dailyForecasts[i].low = data.channel.item.forecast[i + 1].low
           that.dailyForecasts[i].high = data.channel.item.forecast[i + 1].high
-          that.dailyForecasts[i].icon = 'icon ' + that.getIconClass(data.channel.item.forecast[i + 1].code)
+          that.dailyForecasts[i].icon = `icon ${that.getIconClass(data.channel.item.forecast[i + 1].code)}`
           that.dailyForecasts[i].text = data.channel.item.forecast[i + 1].text
         }
       })

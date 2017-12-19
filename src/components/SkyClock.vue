@@ -10,7 +10,7 @@
 export default {
   name: 'SkyClock',
   data () {
-    let never = new Date(0, 0, 0, 0, 0, 0)
+    const never = new Date(0, 0, 0, 0, 0, 0)
     return {
       face: null,       // Canvas for clock face
       tod: null,        // Canvas for Time of Day
@@ -45,79 +45,79 @@ export default {
   },
   methods: {
     drawLines (color) {
-      let ctx = this.face.getContext('2d')
-      let centerX = this.size / 2
-      let centerY = this.size / 2
+      const ctx = this.face.getContext('2d')
+      const centerX = this.size / 2
+      const centerY = this.size / 2
       ctx.beginPath()
       ctx.strokeStyle = color
       ctx.lineWidth = 1
       // draw a long line for each hour
-      let items = 24
-      let r = (this.size / 2) * 0.8
+      const items = 24
+      const r = (this.size / 2) * 0.8
       for (let i = 0; i < items; i++) {
-        let x = centerX + r * Math.cos(2 * Math.PI * i / items)
-        let y = centerY + r * Math.sin(2 * Math.PI * i / items)
+        const x = centerX + r * Math.cos(2 * Math.PI * i / items)
+        const y = centerY + r * Math.sin(2 * Math.PI * i / items)
         ctx.moveTo(centerX, centerY)
         ctx.lineTo(x, y)
       }
       // draw a short outer tick for every 15 minutes
-      items *= 4
-      let r1 = (this.size / 2) * 0.975
-      let r2 = (this.size / 2)
-      for (let i = 0; i < items; i++) {
-        let xStart = centerX + r1 * Math.cos(2 * Math.PI * i / items)
-        let yStart = centerY + r1 * Math.sin(2 * Math.PI * i / items)
-        let xEnd = centerX + r2 * Math.cos(2 * Math.PI * i / items)
-        let yEnd = centerY + r2 * Math.sin(2 * Math.PI * i / items)
+      const ticks = items * 4
+      const r1 = (this.size / 2) * 0.975
+      const r2 = (this.size / 2)
+      for (let i = 0; i < ticks; i++) {
+        const xStart = centerX + r1 * Math.cos(2 * Math.PI * i / ticks)
+        const yStart = centerY + r1 * Math.sin(2 * Math.PI * i / ticks)
+        const xEnd = centerX + r2 * Math.cos(2 * Math.PI * i / ticks)
+        const yEnd = centerY + r2 * Math.sin(2 * Math.PI * i / ticks)
         ctx.moveTo(xStart, yStart)
         ctx.lineTo(xEnd, yEnd)
       }
       ctx.stroke()
     },
     drawClockFace (color) {
-      let fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005, // 18 - 23
-        -0.04, -0.02, -0.02, -0.015, -0.01, -0.005,       // 0 - 5
-        0.0, 0.005, 0.01, 0.015, 0.0, 0.0,                // 6 - 11
-        -0.01, 0.0, 0.0, 0.0, 0.0, 0.0]                   // 12 - 17
-      let ctx = this.face.getContext('2d')
+      const fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005, // 18 - 23
+        -0.04, -0.02, -0.02, -0.015, -0.01, -0.005,         // 0 - 5
+        0.0, 0.005, 0.01, 0.015, 0.0, 0.0,                  // 6 - 11
+        -0.01, 0.0, 0.0, 0.0, 0.0, 0.0]                     // 12 - 17
+      const ctx = this.face.getContext('2d')
       ctx.beginPath()
-      let x0 = (this.size / 2) * 0.925
-      let y0 = (this.size / 2) * 1.04
+      const x0 = (this.size / 2) * 0.925
+      const y0 = (this.size / 2) * 1.04
       ctx.font = '16px Arial'
       ctx.strokeStyle = color
       ctx.fillStyle = color
-      let items = 24
+      const items = 24
       let r = (this.size / 2) * 0.87
       for (let i = 0; i < items; i++) {
         // fudge factor gets numbers properyly aligned...
-        let x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i])
-        let y = y0 + r * Math.sin(2 * Math.PI * i / items + fudge[i])
+        const x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i])
+        const y = y0 + r * Math.sin(2 * Math.PI * i / items + fudge[i])
         ctx.fillText((i + (items * 3 / 4)) % items, x, y)
       }
       ctx.closePath()
     },
     drawTime (element, time, color, width) {
-      let centerX = this.size / 2
-      let centerY = this.size / 2
-      let ctx = element.getContext('2d')
+      const centerX = this.size / 2
+      const centerY = this.size / 2
+      const ctx = element.getContext('2d')
       ctx.beginPath()
       ctx.clearRect(0, 0, this.size, this.size)
       ctx.strokeStyle = color
       ctx.lineWidth = width
       let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0
-      let r = (this.size / 2) * 1.1
+      const r = (this.size / 2) * 1.1
       part = (part + 0.25) % 1
-      let x = centerX + r * Math.cos(2.0 * Math.PI * part)
-      let y = centerY + r * Math.sin(2.0 * Math.PI * part)
+      const x = centerX + r * Math.cos(2.0 * Math.PI * part)
+      const y = centerY + r * Math.sin(2.0 * Math.PI * part)
       ctx.moveTo(centerX, centerY)
       ctx.lineTo(x, y)
       ctx.stroke()
       ctx.closePath()
     },
     drawWedge (start, end, r, color) {
-      let ctx = this.face.getContext('2d')
-      let centerX = this.size / 2
-      let centerY = this.size / 2
+      const ctx = this.face.getContext('2d')
+      const centerX = this.size / 2
+      const centerY = this.size / 2
       ctx.beginPath()
       ctx.strokeStyle = color
       ctx.fillStyle = color
@@ -127,8 +127,8 @@ export default {
       let endAngle = (end.getHours() * 60.0 + end.getMinutes()) / 1440.0
       endAngle = (endAngle + 0.25) % 1
       ctx.moveTo(centerX, centerY)
-      let x = centerX + r * Math.cos(2.0 * Math.PI * startAngle)
-      let y = centerY + r * Math.sin(2.0 * Math.PI * startAngle)
+      const x = centerX + r * Math.cos(2.0 * Math.PI * startAngle)
+      const y = centerY + r * Math.sin(2.0 * Math.PI * startAngle)
       ctx.lineTo(x, y)
       ctx.arc(centerX, centerY, r, startAngle * 2.0 * Math.PI, endAngle * 2.0 * Math.PI)
       ctx.lineTo(centerX, centerY)
@@ -136,7 +136,7 @@ export default {
       ctx.closePath()
     },
     drawSunMoonInfo (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
-      let r = (this.size / 2) * 0.7
+      const r = (this.size / 2) * 0.7
       this.drawWedge(soct, sunRise, r, '#888')
       this.drawWedge(sunRise, sunSet, r, '#00f')
       this.drawWedge(sunSet, eoct, r, '#888')
@@ -146,22 +146,22 @@ export default {
     // in a format like: '12/16/2017'.
     // Uses date supplied, or current date.
     getDateString (date) {
-      let now = date || new Date()
+      const now = date || new Date()
       return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     getSiderialTime (cb) {
-      let url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=' + this.getDateString() + '&time=now&loc=Kirkland,%20WA'
-      let request = new XMLHttpRequest()
+      const url = `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&loc=Kirkland,%20WA`
+      const request = new XMLHttpRequest()
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            let response = JSON.parse(request.response)
-            let results = response.properties.data[0]
-            let sid = results.last
-            let parts = sid.split('.')
-            let time = parts[0]
-            parts = time.split(':')
-            let date = new Date(results.year, results.month - 1, results.day, parts[0], parts[1], parts[2])
+            const response = JSON.parse(request.response)
+            const results = response.properties.data[0]
+            const sid = results.last
+            const parts = sid.split('.')
+            const time = parts[0]
+            const tparts = time.split(':')
+            const date = new Date(results.year, results.month - 1, results.day, tparts[0], tparts[1], tparts[2])
             cb(date)
           }
         }
@@ -175,9 +175,9 @@ export default {
     // Date objects over ands over, and a string to convert.
     // Return a Date object for the string.
     getDateFromSunMoonData (today, data) {
-      let parts = data.split(/[: ]/)
+      const parts = data.split(/[: ]/)
       let hours = parseInt(parts[0], 10)
-      let minutes = parseInt(parts[1], 10)
+      const minutes = parseInt(parts[1], 10)
       if (parts[2] === 'p.m.') { hours += 12 }
       return new Date(today.getFullYear(), today.getMonth(),
         today.getDate(), hours, minutes, 0)
@@ -194,14 +194,14 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=' + this.getDateString(now) + '&loc=Kirkland,%20WA'
-      let request = new XMLHttpRequest()
-      let that = this
+      const url = `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString(now)}&loc=Kirkland,%20WA`
+      const request = new XMLHttpRequest()
+      const that = this
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            let response = JSON.parse(request.response)
-            let results = []
+            const response = JSON.parse(request.response)
+            const results = []
             results[0] = that.getDateFromSunMoonData(now, response.moondata[0].time)
             results[1] = that.getDateFromSunMoonData(now, response.moondata[1].time)
             results[2] = that.getDateFromSunMoonData(now, response.moondata[2].time)
@@ -218,13 +218,13 @@ export default {
       request.send()
     },
     updateFace () {
-      let now = new Date()
+      const now = new Date()
       // Redraw the face if the day has changed
       if (now.toDateString() !== this.lastFaceUpdate.toDateString()) {
         this.lastFaceUpdate = now
         this.drawLines('#444')
         this.drawClockFace('#000')
-        let that = this
+        const that = this
         this.getSunMoonData(now, function (data) {
           that.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
           that.drawLines('#444')
@@ -233,7 +233,7 @@ export default {
       }
     },
     updateTod () {
-      let now = new Date()
+      const now = new Date()
       // Redraw the time of day if more than 5 minutes has passed
       if (now - this.lastTodUpdate > 300000) {
         this.lastTodUpdate = now
@@ -241,11 +241,11 @@ export default {
       }
     },
     updateSid () {
-      let now = new Date()
+      const now = new Date()
       // Redraw the time of day if more than 5 minutes has passed
       if (now - this.lastSidUpdate > 300000) {
         this.lastSidUpdate = now
-        let that = this
+        const that = this
         this.getSiderialTime(function (sidTime) {
           that.drawTime(that.sid, sidTime, 'rgb(0, 255, 255)', 1)
         })

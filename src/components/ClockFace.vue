@@ -14,7 +14,7 @@
 export default {
   name: 'ClockFace',
   data () {
-    let t = new Date()
+    const t = new Date()
     return {
       time: t,
       parts: this.getTimeParts(t),
@@ -40,24 +40,24 @@ export default {
   },
   methods: {
     getTimeParts (time) {
-      let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-      let months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+      const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+      const minutes = time.getMinutes()
+      const seconds = time.getSeconds()
       let hours = time.getHours()
-      let minutes = time.getMinutes()
-      let seconds = time.getSeconds()
-      let ispm = hours >= 12
+      const ispm = hours >= 12
       hours = (hours > 12) ? hours - 12 : hours
       hours = (hours === 0) ? 12 : hours
-      let hhmm = hours + ':' + ((minutes < 10) ? '0' + minutes : minutes)
-      let ss = (seconds < 10) ? '0' + seconds : seconds.toString()
-      let suffix = ispm ? 'PM' : 'AM'
-      let dow = days[time.getDay()]
-      let mdy = months[time.getMonth()] + ' ' + time.getDate() + ', ' + time.getFullYear()
+      const hhmm = `${hours}:${((minutes < 10) ? '0' + minutes : minutes)}`
+      const ss = (seconds < 10) ? '0' + seconds : seconds.toString()
+      const suffix = ispm ? 'PM' : 'AM'
+      const dow = days[time.getDay()]
+      const mdy = `${months[time.getMonth()]} ${time.getDate()}, ${time.getFullYear()}`
       return {
         hhmm: hhmm,
         ss: ss,
         suffix: suffix,
-        full: hhmm + ':' + ss + ' ' + suffix,
+        full: `${hhmm}:${ss} ${suffix}`,
         dow: dow,
         mdy: mdy,
         isPM: ispm

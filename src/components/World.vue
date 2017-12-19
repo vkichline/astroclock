@@ -51,17 +51,17 @@ export default {
   },
   methods: {
     getTimeString: function () {
-      let now = new Date()
-      let hours = now.getUTCHours()
-      let minutes = now.getUTCMinutes()
-      return hours.toString() + ':' + (minutes < 10 ? '0' + minutes.toString() : minutes.toString())
+      const now = new Date()
+      const hours = now.getUTCHours()
+      const minutes = now.getUTCMinutes()
+      return `${hours.toString()}:${(minutes < 10 ? '0' + minutes.toString() : minutes.toString())}`
     },
     makeImgUrl: function () {
-      let utcTime = this.getTimeString()
-      return 'http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=' + utcTime
+      const utcTime = this.getTimeString()
+      return `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${utcTime}`
     },
     periodic: function () {
-      let elem = this.phase ? this.bg1 : this.bg2
+      const elem = this.phase ? this.bg1 : this.bg2
       elem.src = this.makeImgUrl()
     },
     change: function () {
