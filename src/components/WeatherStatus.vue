@@ -133,13 +133,22 @@ export default {
           return 'partly-cloudy-day'
       }
     },
+    angleToDirection: function (angle) {
+      const direction = ['North', 'NNE', 'NE', 'ENE', 'East', 'ESE', 'SE',
+        'SSE', 'South', 'SSW', 'SW', 'WSW', 'West', 'WNW', 'NW', 'NNW']
+      const count = direction.length
+      angle = (angle - (360 / count / 2) + 360) % 360 // set back half a division
+      const index = Math.ceil(angle / (360 / count)) % 16
+      return direction[index]
+    },
     refreshForecast: function () {
       const that = this
       this.getForecast(function (data) {
         that.icon = 'icon ' + that.getIconClass(data.channel.item.condition.code)
         that.temp = data.channel.item.condition.temp
         const fc = data.channel.item.forecast[0]
-        const forecast = `${fc.text}; Low ${fc.low}°, High ${fc.high}°.`
+        const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
+        const forecast = `${fc.text}, Wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
         that.todaysForecast = forecast
         let arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
@@ -165,7 +174,6 @@ export default {
   font-size: 50%;
   color: $fgcolor;
   padding-top: 0.25em;
-  width: 20em;
   margin-left: auto;
   margin-right: auto;
   padding-top: 0;
