@@ -73,43 +73,44 @@ $fontsize: 400%;
 
 .clock-face {
   font-family: sans-serif;
-    text-align: center;
-    color: $fgcolor;
-    margin-top: 1em;
+  text-shadow: 2px 2px 4px #000000;
+  text-align: center;
+  color: $fgcolor;
+  margin-top: 1em;
 }
 
 .clock-face .time {
-    display: inline-block;
-    font-size: $fontsize;
-    font-weight: bold;
-    color: inherit;
+  display: inline-block;
+  font-size: $fontsize;
+  font-weight: bold;
+  color: inherit;
 }
 
 .clock-face .dow {
-    display: block;
-    font-size: $fontsize/3.33;
+  display: block;
+  font-size: $fontsize/3.33;
 }
 
 .clock-face .mdy {
-    display: block;
-    font-size: $fontsize/3.33%;
+  display: block;
+  font-size: $fontsize/3.33%;
 }
 
 .right-box {
-    display: inline-block;
-    font-weight: bold;
-    text-align: left;
-    font-size: $fontsize/2.5;
-    width: 2em;
+  display: inline-block;
+  font-weight: bold;
+  text-align: left;
+  font-size: $fontsize/2.5;
+  width: 2em;
 }
 
 .clock-face .seconds {
-    display: inline-block;
-    width: 4em;
+  display: inline-block;
+  width: 4em;
 }
 
 .clock-face .suffix {
-    display: inline-block;    
-    width: 4em;
+  display: inline-block;
+  width: 4em;
 }
 </style>

@@ -173,6 +173,7 @@ export default {
   font-family: sans-serif;
   font-size: 75%;
   color: $fgcolor;
+  text-shadow: 2px 2px 4px #000000;
   padding-top: 0.25em;
   margin-left: auto;
   margin-right: auto;
@@ -183,6 +184,7 @@ export default {
   font-family: sans-serif;
   color: $fgcolor;
   font-size: 300%;
+  text-shadow: 2px 2px 4px #000000;
   width: 3.5em;
   height: 1.2em;
   margin-left: auto;
