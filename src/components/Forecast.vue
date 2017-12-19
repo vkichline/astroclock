@@ -21,6 +21,7 @@ export default {
 @import "./_icons.scss";
 
 .forecast {
+    text-shadow: 2px 2px 4px #000000;
     padding: 8px;
     margin: 4px;
     display: inline-block;
