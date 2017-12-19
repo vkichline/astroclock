@@ -30,78 +30,78 @@
   <div id="time-display"></div>
   <script>
   (function() {
-    let canvas = document.getElementById('sky-clock');
-    let ctx = canvas.getContext("2d");
-    let size = 240;
-    let centerX = size / 2;
-    let centerY = size / 2;
+    const canvas = document.getElementById('sky-clock');
+    const ctx = canvas.getContext("2d");
+    const size = 240;
+    const centerX = size / 2;
+    const centerY = size / 2;
 
-    let drawClockFace = function (color) {
-      let fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005,  // 18 - 23
+    const drawClockFace = function (color) {
+      const fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005,  // 18 - 23
                   -0.027, -0.02, -0.02, -0.015, -0.01, -0.005, // 0 - 5
                   0.0, 0.005, 0.01, 0.015, 0.0, 0.0,  // 6 - 11
                   0.0, 0.0, 0.0, 0.0, 0.0, 0.0]; // 12 - 17
-     ctx.beginPath();
-      let x0 = (size / 2) * 0.95;
-      let y0 =(size / 2) * 1.03;
+      ctx.beginPath();
+      const x0 = (size / 2) * 0.95;
+      const y0 =(size / 2) * 1.03;
       ctx.font = "12px Arial";
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
-      let items = 24;
-      let r = (size / 2) * 0.9;
+      const items = 24;
+      const r = (size / 2) * 0.9;
       for(let i = 0; i < items; i++) {
         // fudge factor gets numbers properyly aligned...
-        let x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i]);
-        let y = y0 + r * Math.sin(2 * Math.PI * i / items + fudge[i]);   
+        const x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i]);
+        const y = y0 + r * Math.sin(2 * Math.PI * i / items + fudge[i]);   
         ctx.fillText((i + (items * 3 / 4)) % items, x, y);
       }
       ctx.closePath();
     }
 
-    let drawLines = function (color) {
+    const drawLines = function (color) {
       ctx.beginPath();
       ctx.strokeStyle = color;
       ctx.lineWidth = 1;
       // draw a long line for each hour
-      let items = 24;
-      let r = (size / 2) * 0.8;
+      const items = 24;
+      const r = (size / 2) * 0.8;
       for(let i = 0; i < items; i++) {
-        let x = centerX + r * Math.cos(2 * Math.PI * i / items);
-        let y = centerY + r * Math.sin(2 * Math.PI * i / items);   
+        const x = centerX + r * Math.cos(2 * Math.PI * i / items);
+        const y = centerY + r * Math.sin(2 * Math.PI * i / items);   
         ctx.moveTo(centerX, centerY);
         ctx.lineTo(x ,y);
       }
       // draw a short outer tick for every 15 minutes
-      items *= 4;
-      let r1 = (size / 2) * 0.975;
-      let r2 = (size / 2);
-      for(i = 0; i < items; i++) {
-        let xStart = centerX + r1 * Math.cos(2 * Math.PI * i / items);
-        let yStart = centerY + r1 * Math.sin(2 * Math.PI * i / items);   
-        let xEnd = centerX + r2 * Math.cos(2 * Math.PI * i / items);
-        let yEnd = centerY + r2 * Math.sin(2 * Math.PI * i / items);   
+      const ticks = items * 4;
+      const r1 = (size / 2) * 0.975;
+      const r2 = (size / 2);
+      for(let i = 0; i < ticks; i++) {
+        const xStart = centerX + r1 * Math.cos(2 * Math.PI * i / ticks);
+        const yStart = centerY + r1 * Math.sin(2 * Math.PI * i / ticks);   
+        const xEnd = centerX + r2 * Math.cos(2 * Math.PI * i / ticks);
+        const yEnd = centerY + r2 * Math.sin(2 * Math.PI * i / ticks);   
         ctx.moveTo(xStart, yStart);
         ctx.lineTo(xEnd, yEnd);
       }
       ctx.stroke();
     }
 
-    let drawTime = function (time, color, width) {
+    const drawTime = function (time, color, width) {
       ctx.beginPath();
       ctx.strokeStyle = color;
       ctx.lineWidth = width;
       let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0;
-      let r = (size / 2) * 1.1;
+      const r = (size / 2) * 1.1;
       part = (part + 0.25) % 1;
-      let x = centerX + r * Math.cos(2.0 * Math.PI * part);
-      let y = centerY + r * Math.sin(2.0 * Math.PI * part);
+      const x = centerX + r * Math.cos(2.0 * Math.PI * part);
+      const y = centerY + r * Math.sin(2.0 * Math.PI * part);
       ctx.moveTo(centerX, centerY);
       ctx.lineTo(x, y);
       ctx.stroke();
       ctx.closePath();
     }
 
-    let drawWedge = function (start, end, r, color) {
+    const drawWedge = function (start, end, r, color) {
       ctx.beginPath();
       ctx.strokeStyle = color;
       ctx.fillStyle = color;
@@ -111,8 +111,8 @@
       let endAngle = (end.getHours() * 60.0 + end.getMinutes()) / 1440.0;
       endAngle = (endAngle + 0.25) % 1;
       ctx.moveTo(centerX, centerY);
-      let x = centerX + r * Math.cos(2.0 * Math.PI * startAngle);
-      let y = centerY + r * Math.sin(2.0 * Math.PI * startAngle);
+      const x = centerX + r * Math.cos(2.0 * Math.PI * startAngle);
+      const y = centerY + r * Math.sin(2.0 * Math.PI * startAngle);
       ctx.lineTo(x, y);
       ctx.arc(centerX, centerY, r, startAngle * 2.0 * Math.PI, endAngle * 2.0 * Math.PI);
       ctx.lineTo(centerX, centerY);
@@ -120,27 +120,28 @@
       ctx.closePath();
     }
 
-    let drawSunMoonInfo = function (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
-      let r = (size / 2) * 0.7;
+    const drawSunMoonInfo = function (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
+      const r = (size / 2) * 0.7;
       drawWedge(soct, sunRise, r, '#eee');
       drawWedge(sunRise, sunSet, r, '#ff0');
       drawWedge(sunSet, eoct, r, '#eee');
       drawWedge(moonRise, moonSet,  (size / 4), 'rgba(0, 255, 0, 0.5)');
     }
 
-    let getSiderialTime = function (cb) {
-      let url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=today&time=now&loc=Kirkland,%20WA';
-      let request = new XMLHttpRequest();
+    const getSiderialTime = function (cb) {
+      const url = 'http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=today&time=now&loc=Kirkland,%20WA';
+      const request = new XMLHttpRequest();
+      request.timeout = 5000
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            let response = JSON.parse(request.response);
-            let results = response.properties.data[0];
-            let sid = results.last;
+            const response = JSON.parse(request.response);
+            const results = response.properties.data[0];
+            const sid = results.last;
             let parts = sid.split('.');
-            let time = parts[0];
+            const time = parts[0];
             parts = time.split(':');
-            let date = new Date(results.year, results.month - 1, results.day, parts[0], parts[1], parts[2]);
+            const date = new Date(results.year, results.month - 1, results.day, parts[0], parts[1], parts[2]);
             cb(date)
           }
         }
@@ -154,10 +155,10 @@
     // Supply a date object for today so we don't have to create
     // Date objects over ands over, and a string to convert.
     // Return a Date object for the string.
-    let getDateFromSunMoonData = function (today, data) {
-      let parts = data.split(/[: ]/);
+    const getDateFromSunMoonData = function (today, data) {
+      const parts = data.split(/[: ]/);
       let hours = parseInt(parts[0], 10);
-      let minutes = parseInt(parts[1], 10);
+      const minutes = parseInt(parts[1], 10);
       if (parts[2] === 'p.m.') { hours += 12; }
       return new Date(today.getFullYear(), today.getMonth(),
         today.getDate(), hours, minutes, 0);
@@ -174,14 +175,15 @@
     //   [7] = EndCivilTwilight
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
-    let getSunMoonData = function (now, cb) {
-      let url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=today&loc=Kirkland,%20WA';
-      let request = new XMLHttpRequest();
+    const getSunMoonData = function (now, cb) {
+      const url = 'http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=today&loc=Kirkland,%20WA';
+      const request = new XMLHttpRequest();
+      request.timeout = 5000
       request.onreadystatechange = function () {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            let response = JSON.parse(request.response);
-            let results = [];
+            const response = JSON.parse(request.response);
+            const results = [];
             results[0] = getDateFromSunMoonData(now, response.moondata[0].time);
             results[1] = getDateFromSunMoonData(now, response.moondata[1].time);
             results[2] = getDateFromSunMoonData(now, response.moondata[2].time);
@@ -200,11 +202,11 @@
 
     drawLines('#444');
     drawClockFace('#fff');
-    let now = new Date();
+    const now = new Date();
     drawTime(now, 'rgb(255, 0, 0)', 3);
 
     getSunMoonData(now, function (data) {
-      let display = document.getElementById('time-display');
+      const display = document.getElementById('time-display');
       drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7]);
       drawLines('#444');
       drawClockFace('#fff');

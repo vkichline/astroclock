@@ -150,7 +150,7 @@ export default {
         const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
         const forecast = `${fc.text}, wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
         that.todaysForecast = forecast
-        let arr = [{}, {}, {}, {}, {}]
+        const arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
           arr[i].day = data.channel.item.forecast[i + 1].day
           arr[i].low = data.channel.item.forecast[i + 1].low

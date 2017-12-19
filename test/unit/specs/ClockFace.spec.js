@@ -15,8 +15,8 @@ describe('ClockFace.vue', () => {
   it('Should return an object from getTimeParts with 7 properties', () => {
     const Constructor = Vue.extend(ClockFace)
     const vm = new Constructor().$mount()
-    let now = new Date(2017, 11, 14, 14, 54, 3, 0)
-    let t = vm.getTimeParts(now)
+    const now = new Date(2017, 11, 14, 14, 54, 3, 0)
+    const t = vm.getTimeParts(now)
     expect(Object.keys(t).length).toBe(7)
     expect(t.hhmm).toEqual('2:54')
     expect(t.ss).toEqual('03')

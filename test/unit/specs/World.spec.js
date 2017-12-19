@@ -32,7 +32,7 @@ describe('World.vue', () => {
   it('Should return a simple UTC time when getTimeString is called', () => {
     const Constructor = Vue.extend(World)
     const vm = new Constructor().$mount()
-    let str = vm.getTimeString()
+    const str = vm.getTimeString()
     expect(str).toMatch(/[0-9]{1,2}:[0-9]{2}/)
   })
 })
@@ -41,7 +41,7 @@ describe('World.vue', () => {
   it('Should toggle "phase" when "change" is called', () => {
     const Constructor = Vue.extend(World)
     const vm = new Constructor().$mount()
-    let phase = vm.phase
+    const phase = vm.phase
     vm.change()
     expect(vm.phase).toEqual(!phase)
   })

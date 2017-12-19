@@ -26,7 +26,7 @@ export default {
     }
   },
   mounted () {
-    let that = this
+    const that = this
     this.timer = window.setInterval(() => {
       that.parts = that.getTimeParts(new Date())
     }, timeDelay)

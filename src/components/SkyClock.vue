@@ -92,7 +92,7 @@ export default {
       ctx.strokeStyle = color
       ctx.fillStyle = color
       const items = 24
-      let r = (this.size / 2) * 0.87
+      const r = (this.size / 2) * 0.87
       for (let i = 0; i < items; i++) {
         // fudge factor gets numbers properyly aligned...
         const x = x0 + r * Math.cos(2 * Math.PI * i / items + fudge[i])
