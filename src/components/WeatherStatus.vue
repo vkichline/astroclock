@@ -6,17 +6,26 @@
     </div>
     <div id="todays-forecast">{{ todaysForecast }}</div>
     <div class="forecasts">
-      <Forecast :day="dailyForecasts[0].day" :low="dailyForecasts[0].low" :high="dailyForecasts[0].high" :icon="dailyForecasts[0].icon" :text="dailyForecasts[0].text" />
-      <Forecast :day="dailyForecasts[1].day" :low="dailyForecasts[1].low" :high="dailyForecasts[1].high" :icon="dailyForecasts[1].icon" :text="dailyForecasts[1].text" />
-      <Forecast :day="dailyForecasts[2].day" :low="dailyForecasts[2].low" :high="dailyForecasts[2].high" :icon="dailyForecasts[2].icon" :text="dailyForecasts[2].text" />
-      <Forecast :day="dailyForecasts[3].day" :low="dailyForecasts[3].low" :high="dailyForecasts[3].high" :icon="dailyForecasts[3].icon" :text="dailyForecasts[3].text" />
-      <Forecast :day="dailyForecasts[4].day" :low="dailyForecasts[4].low" :high="dailyForecasts[4].high" :icon="dailyForecasts[4].icon" :text="dailyForecasts[4].text" />
+      <Forecast :fcdata="dailyForecasts[0]" />
+      <Forecast :fcdata="dailyForecasts[1]" />
+      <Forecast :fcdata="dailyForecasts[2]" />
+      <Forecast :fcdata="dailyForecasts[3]" />
+      <Forecast :fcdata="dailyForecasts[4]" />
     </div>
   </div>
 </template>
 
 <script>
+
 import Forecast from './Forecast'
+
+const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
+
+// This component diplays the current temperature and weather conditions, plus the forecast for the next 5 days.
+// Data is downloaded from the Yahoo weather API.  Icons are displayed by translating a code into an
+// appropriate clase name, and the background image of a div is set to that class.  CSS has class defs with
+// base64-encoded icons.  (Works best when served directly from file system.)
+//
 export default {
   name: 'WeatherStatus',
   components: {
@@ -38,7 +47,7 @@ export default {
     }
   },
   mounted () {
-    this.timer = setInterval(this.refreshForecast, 1000 * 60 * 60)
+    this.timer = setInterval(this.refreshForecast, timerDelay)
     this.refreshForecast()
   },
   beforeDestroy () {
@@ -59,13 +68,13 @@ export default {
             const results = response.query.results
             cb(results)
           }
-        } else {
-          // Return the initial weather forecast since no data is available.
         }
       }
       request.open('GET', url)
       request.send()
     },
+    // There are many more weather conditions reported than we have icons for.
+    // This function collapses the codes into a few reasonable icon classes.
     getIconClass: function (weatherCode) {
     // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
       weatherCode = parseInt(weatherCode)

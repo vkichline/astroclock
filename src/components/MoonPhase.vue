@@ -5,6 +5,9 @@
 </template>
 
 <script>
+
+const timeDelay = 1000 * 60 * 60  // Redraw moon phase once an hour
+
 export default {
   name: 'MoonPhase',
   data () {
@@ -13,7 +16,7 @@ export default {
     }
   },
   mounted () {
-    this.timer = setInterval(this.refreshMoonImage, 1000 * 60 * 60)
+    this.timer = setInterval(this.refreshMoonImage, timeDelay)
     this.refreshMoonImage()
   },
   beforeDestroy () {

@@ -7,6 +7,11 @@
 </template>
 
 <script>
+
+const faceDelay = 1000 * 60 // Check once a minute to see if background face needs redraw
+const todDelay = 1000 * 60  // Check once a minute to see it time of day needs update
+const sidDelay = 1000 * 60  // Check once a minute to see if Sidereal Time needs update
+
 export default {
   name: 'SkyClock',
   data () {
@@ -30,9 +35,9 @@ export default {
     this.sid = document.getElementById('sid')
     if (this.face && this.tod && this.sid) {
       this.size = this.face.clientWidth
-      this.faceTimer = setInterval(this.updateFace, 1000 * 60)
-      this.todTimer = setInterval(this.updateTod, 1000 * 60)
-      this.sidTimer = setInterval(this.updateSid, 1000 * 60)
+      this.faceTimer = setInterval(this.updateFace, faceDelay)
+      this.todTimer = setInterval(this.updateTod, todDelay)
+      this.sidTimer = setInterval(this.updateSid, sidDelay)
       this.updateFace()
       this.updateTod()
       this.updateSid()

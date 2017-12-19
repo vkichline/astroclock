@@ -1,37 +1,35 @@
 <template>
   <div class="clock-face">
-    <div class="time">{{ hhmm }}</div>
+    <div class="time">{{ parts.hhmm }}</div>
     <div class="right-box">
-      <div class="seconds">{{ ':' + ss }}</div>
-      <div class="suffix">{{ suffix }}</div>
+      <div class="seconds">{{ ':' + parts.ss }}</div>
+      <div class="suffix">{{ parts.suffix }}</div>
     </div>
-    <div class="mdy">{{ mdy }}</div>
-    <div class="dow">{{ dow }}</div>
+    <div class="mdy">{{ parts.mdy }}</div>
+    <div class="dow">{{ parts.dow }}</div>
   </div>
 </template>
 
 <script>
+const timeDelay = 1000  // Update time every second
+
+// This component displays the large time and date, intended to be seen across the room.
+// On each second, the data's 'parts' object is updated with a breakdown of time info.
+//
 export default {
   name: 'ClockFace',
   data () {
     const t = new Date()
     return {
-      time: t,
       parts: this.getTimeParts(t),
       timer: null
     }
   },
-  computed: {
-    hhmm: function () { return this.getTimeParts(this.time).hhmm },
-    ss: function () { return this.getTimeParts(this.time).ss },
-    suffix: function () { return this.getTimeParts(this.time).suffix },
-    dow: function () { return this.getTimeParts(this.time).dow },
-    mdy: function () { return this.getTimeParts(this.time).mdy }
-  },
   mounted () {
+    let that = this
     this.timer = window.setInterval(() => {
-      this.time = new Date()
-    }, 1000)
+      that.parts = that.getTimeParts(new Date())
+    }, timeDelay)
   },
   beforeDestroy () {
     if (this.timer) {
@@ -39,6 +37,7 @@ export default {
     }
   },
   methods: {
+    // Split the time into an object with strings broken up and formatted to fit component needs.
     getTimeParts (time) {
       const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
       const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']

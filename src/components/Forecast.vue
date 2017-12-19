@@ -1,15 +1,18 @@
 <template>
     <div class="forecast">
-        <div>{{ day }}</div>
-        <div>{{ low }}&deg; / {{ high }}&deg;</div>
-        <div v-bind:class="icon"></div>
-        <div>{{ text }}</div>
+        <div>{{ fcdata.day }}</div>
+        <div>{{ fcdata.low }}&deg; / {{ fcdata.high }}&deg;</div>
+        <div :class="fcdata.icon"></div>
+        <div>{{ fcdata.text }}</div>
     </div>
 </template>
 
 <script>
+
+// This component displays one day's forecast.  An array of these is set up by WeatherStatus.
+
 export default {
-  props: [ 'day', 'low', 'high', 'icon', 'text' ]
+  props: [ 'fcdata' ]
 }
 </script>
 
