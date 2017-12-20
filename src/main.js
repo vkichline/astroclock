@@ -6,6 +6,7 @@ import Vue from 'vue'
 import World from './components/World'
 
 Vue.config.productionTip = false
+Vue.config.strict = true
 
 /* eslint-disable no-new */
 new Vue({
