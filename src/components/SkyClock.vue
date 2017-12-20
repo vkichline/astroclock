@@ -202,7 +202,7 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      var url = this.getSunMoonDataUrl()
+      const url = this.getSunMoonDataUrl()
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
       const that = this
