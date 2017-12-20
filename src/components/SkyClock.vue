@@ -255,11 +255,7 @@ export default {
         this.lastSidUpdate = now
         const that = this
         this.getSiderialTime(function (sidTime) {
-          const start = new Date(sidTime.getTime() - 21600000)
-          const end = new Date(sidTime.getTime() + 21600000)
-          that.drawWedge(start, end, 200, 'rgba(0, 0, 150, 0.5)')
           that.drawTime(that.sid, sidTime, 'rgb(0, 255, 255)', 1)
-          that.drawClockFace('#fff')
         })
       }
     }
