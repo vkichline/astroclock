@@ -3,7 +3,7 @@
         <div>{{ fcdata.day }}</div>
         <div>{{ fcdata.low }}&deg; / {{ fcdata.high }}&deg;</div>
         <div :class="fcdata.icon"></div>
-        <div>{{ fcdata.text }}</div>
+        <div class="description">{{ fcdata.text }}</div>
     </div>
 </template>
 
@@ -35,7 +35,16 @@ export default {
     background: rgba(0, 0, 0, 0.3);
 }
 
-.icon {
+.forecast .description {
+    display: inline-block;
+    background-color: rgba(0, 0, 0, 0.5);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 2px 8px;
+    border-radius: 1em;
+}
+
+.forecast .icon {
   height: 100px;
   width: 100px;
   background-position: center;
