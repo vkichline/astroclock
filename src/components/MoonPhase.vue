@@ -5,11 +5,13 @@
 </template>
 
 <script>
+import QueryHelper from './QueryHelper'
 
 const timeDelay = 1000 * 60 * 60  // Redraw moon phase once an hour
 
 export default {
   name: 'MoonPhase',
+  mixins: [QueryHelper],
   data () {
     return {
       timer: null
@@ -28,12 +30,7 @@ export default {
     refreshMoonImage () {
       const elem = document.getElementById('moonPhaseImage')
       if (elem) {
-        const now = new Date()
-        const hours = now.getUTCHours()
-        const minutes = now.getUTCMinutes()
-        const utcTime = `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
-        const url = `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${utcTime}`
-        elem.style.backgroundImage = `url(${url})`
+        elem.style.backgroundImage = `url(${this.getMoonPhaseImageUrl()})`
       }
     }
   }

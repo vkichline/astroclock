@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import QueryHelper from './QueryHelper'
 
 const faceDelay = 1000 * 60 // Check once a minute to see if background face needs redraw
 const todDelay = 1000 * 60  // Check once a minute to see it time of day needs update
@@ -14,6 +15,7 @@ const sidDelay = 1000 * 60  // Check once a minute to see if Sidereal Time needs
 
 export default {
   name: 'SkyClock',
+  mixins: [QueryHelper],
   data () {
     const never = new Date(0, 0, 0, 0, 0, 0)
     return {
@@ -156,7 +158,6 @@ export default {
       return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     getSiderialTime (cb) {
-      const url = `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&loc=Kirkland,%20WA`
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
       request.onreadystatechange = function () {
@@ -173,7 +174,7 @@ export default {
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getSiderealTimeUrl())
       request.send()
     },
     // API Sun/Moon data always refers to today, and time is
@@ -201,7 +202,7 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      const url = `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString(now)}&loc=Kirkland,%20WA`
+      var url = this.getSunMoonDataUrl()
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
       const that = this
@@ -210,14 +211,37 @@ export default {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
             const results = []
-            results[0] = that.getDateFromSunMoonData(now, response.moondata[0].time)
-            results[1] = that.getDateFromSunMoonData(now, response.moondata[1].time)
-            results[2] = that.getDateFromSunMoonData(now, response.moondata[2].time)
-            results[3] = that.getDateFromSunMoonData(now, response.sundata[0].time)
-            results[4] = that.getDateFromSunMoonData(now, response.sundata[1].time)
-            results[5] = that.getDateFromSunMoonData(now, response.sundata[2].time)
-            results[6] = that.getDateFromSunMoonData(now, response.sundata[3].time)
-            results[7] = that.getDateFromSunMoonData(now, response.sundata[4].time)
+            // The elements of sundata and moondata are not necessarily in any order
+            for (let m = 0; m < 3; m++) {
+              switch (response.moondata[m].phen) {
+                case 'R': results[0] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                  break
+                case 'U': results[1] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                  break
+                case 'S': results[2] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                  break
+                default:
+                  console.log(`Error in case satement: moondata[${m}] is not in: BC, R, U, S, EC.`)
+                  break
+              }
+            }
+            for (let s = 0; s < 5; s++) {
+              switch (response.sundata[s].phen) {
+                case 'BC': results[3] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                  break
+                case 'R': results[4] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                  break
+                case 'U': results[5] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                  break
+                case 'S': results[6] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                  break
+                case 'EC': results[7] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                  break
+                default:
+                  console.log(`Error in case satement: sundata[${s}] is inot in: BC, R, U, S, EC.`)
+                  break
+              }
+            }
             cb(results)
           }
         }

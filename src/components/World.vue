@@ -16,6 +16,7 @@ import ClockFace from './ClockFace'
 import MoonPhase from './MoonPhase'
 import WeatherStatus from './WeatherStatus'
 import SkyClock from './SkyClock'
+import QueryHelper from './QueryHelper'
 
 const timerDelay = 1000 * 60 * 15   // Refresh image every 15 minutes
 
@@ -28,6 +29,7 @@ const timerDelay = 1000 * 60 * 15   // Refresh image every 15 minutes
 //
 export default {
   name: 'World',
+  mixins: [QueryHelper],
   data () {
     return {
       timer: null,
@@ -59,19 +61,11 @@ export default {
     }
   },
   methods: {
-    // Without a time parameter, the API uses UTC for today.
-    // Create a string in the format [H]H:MM, 24 hour based.
-    getTimeString: function () {
-      const now = new Date()
-      const hours = now.getUTCHours()
-      const minutes = now.getUTCMinutes()
-      return `${hours.toString()}:${(minutes < 10 ? '0' + minutes.toString() : minutes.toString())}`
-    },
     // Periodically set the src attribute of the image at the bottom of the stack so its updated.
     // The image will fire the onload event when its complete.
     periodic: function () {
       const elem = this.phase ? this.bg1 : this.bg2
-      elem.src = `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${this.getTimeString()}`
+      elem.src = this.getEarthPictUrl()
     },
     // When a new image has been downloaded and onload fires, switch the zorder of the two images,
     // and toggle the phase variable.

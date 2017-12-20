@@ -18,6 +18,7 @@
 <script>
 
 import Forecast from './Forecast'
+import QueryHelper from './QueryHelper'
 
 const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 
@@ -28,9 +29,8 @@ const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 //
 export default {
   name: 'WeatherStatus',
-  components: {
-    Forecast
-  },
+  mixins: [QueryHelper],
+  components: {Forecast},
   data () {
     return {
       timer: null,
@@ -51,9 +51,6 @@ export default {
   },
   methods: {
     getForecast: function (cb) {
-      const statement = 'select * from weather.forecast where woeid=' + '2433074'
-      const url = `https://query.yahooapis.com/v1/public/yql?format=json&q=${statement}`
-
       const request = new XMLHttpRequest()
       request.timeout = 5000  // 5 seconds
       request.onreadystatechange = function () {
@@ -65,7 +62,7 @@ export default {
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getWeatherUrl())
       request.send()
     },
     // There are many more weather conditions reported than we have icons for.
