@@ -202,11 +202,9 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      const url = this.getSunMoonDataUrl()
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
-      const that = this
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
@@ -214,11 +212,11 @@ export default {
             // The elements of sundata and moondata are not necessarily in any order
             for (let m = 0; m < 3; m++) {
               switch (response.moondata[m].phen) {
-                case 'R': results[0] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                case 'R': results[0] = this.getDateFromSunMoonData(now, response.moondata[m].time)
                   break
-                case 'U': results[1] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                case 'U': results[1] = this.getDateFromSunMoonData(now, response.moondata[m].time)
                   break
-                case 'S': results[2] = that.getDateFromSunMoonData(now, response.moondata[m].time)
+                case 'S': results[2] = this.getDateFromSunMoonData(now, response.moondata[m].time)
                   break
                 default:
                   console.log(`Error in case satement: moondata[${m}] is not in: BC, R, U, S, EC.`)
@@ -227,15 +225,15 @@ export default {
             }
             for (let s = 0; s < 5; s++) {
               switch (response.sundata[s].phen) {
-                case 'BC': results[3] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                case 'BC': results[3] = this.getDateFromSunMoonData(now, response.sundata[s].time)
                   break
-                case 'R': results[4] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                case 'R': results[4] = this.getDateFromSunMoonData(now, response.sundata[s].time)
                   break
-                case 'U': results[5] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                case 'U': results[5] = this.getDateFromSunMoonData(now, response.sundata[s].time)
                   break
-                case 'S': results[6] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                case 'S': results[6] = this.getDateFromSunMoonData(now, response.sundata[s].time)
                   break
-                case 'EC': results[7] = that.getDateFromSunMoonData(now, response.sundata[s].time)
+                case 'EC': results[7] = this.getDateFromSunMoonData(now, response.sundata[s].time)
                   break
                 default:
                   console.log(`Error in case satement: sundata[${s}] is inot in: BC, R, U, S, EC.`)
@@ -246,7 +244,7 @@ export default {
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getSunMoonDataUrl())
       request.send()
     },
     updateFace () {
@@ -256,11 +254,10 @@ export default {
         this.lastFaceUpdate = now
         this.drawLines('#444')
         this.drawClockFace('#000')
-        const that = this
-        this.getSunMoonData(now, function (data) {
-          that.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
-          that.drawLines('#444')
-          that.drawClockFace('#fff')
+        this.getSunMoonData(now, data => {
+          this.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
+          this.drawLines('#444')
+          this.drawClockFace('#fff')
         })
       }
     },
@@ -277,9 +274,8 @@ export default {
       // Redraw the time of day if more than 5 minutes has passed
       if (now - this.lastSidUpdate > 300000) {
         this.lastSidUpdate = now
-        const that = this
-        this.getSiderialTime(function (sidTime) {
-          that.drawTime(that.sid, sidTime, 'rgb(0, 255, 255)', 1)
+        this.getSiderialTime(sidTime => {
+          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 1)
         })
       }
     }

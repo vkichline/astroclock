@@ -139,23 +139,22 @@ export default {
       return direction[index]
     },
     refreshForecast: function () {
-      const that = this
-      this.getForecast(function (data) {
-        that.icon = 'icon ' + that.getIconClass(data.channel.item.condition.code)
-        that.temp = data.channel.item.condition.temp
+      this.getForecast(data => {
+        this.icon = 'icon ' + this.getIconClass(data.channel.item.condition.code)
+        this.temp = data.channel.item.condition.temp
         const fc = data.channel.item.forecast[0]
         const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
-        const forecast = `${fc.text}, wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
-        that.todaysForecast = forecast
+        const forecast = `${fc.text}, wind from ${this.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
+        this.todaysForecast = forecast
         const arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
           arr[i].day = data.channel.item.forecast[i + 1].day
           arr[i].low = data.channel.item.forecast[i + 1].low
           arr[i].high = data.channel.item.forecast[i + 1].high
-          arr[i].icon = `icon ${that.getIconClass(data.channel.item.forecast[i + 1].code)}`
+          arr[i].icon = `icon ${this.getIconClass(data.channel.item.forecast[i + 1].code)}`
           arr[i].text = data.channel.item.forecast[i + 1].text
         }
-        that.dailyForecasts = arr
+        this.dailyForecasts = arr
       })
     }
   }
