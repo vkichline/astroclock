@@ -1,28 +1,17 @@
 <script>
+import {clockLocation} from '../main.js'
+
 // Mixin to provide location, time, and query strings for Naval Observatory queries
 export default {
-  data () {
-    // Determine the timezone
-    let d = new Date()
-    let diff = `-${d.getTimezoneOffset() / 60}`
-    return {
-      // Altitude, lat and long for my house.
-      latitude: '47.725',
-      longitude: '-122.180053',
-      altitude: '93',
-      tz: diff,
-      woeid: '2433074'  // Kirkland, WA (for Yahoo weather API)
-    }
-  },
   methods: {
     getCoords () {
-      return `coords=${this.latitude},${this.longitude}`
+      return `coords=${clockLocation.latitude},${clockLocation.longitude}`
     },
     getHeight () {
-      return `height=${this.altitude}`
+      return `height=${clockLocation.altitude}`
     },
     getTimeZone () {
-      return `tz=${this.tz}`
+      return `tz=${clockLocation.tz}`
     },
     getUtcTime () {
       const now = new Date()
@@ -51,7 +40,7 @@ export default {
       return `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString()}&${this.getTimeZone()}&${this.getCoords()}`
     },
     getWeatherUrl () {
-      return `https://query.yahooapis.com/v1/public/yql?format=json&q=select%20*%20from%20weather.forecast%20where%20woeid=${this.woeid}`
+      return `https://query.yahooapis.com/v1/public/yql?format=json&q=select%20*%20from%20weather.forecast%20where%20woeid=${clockLocation.woeid}`
     }
   }
 }
