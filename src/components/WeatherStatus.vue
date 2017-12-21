@@ -29,8 +29,12 @@ const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 //
 export default {
   name: 'WeatherStatus',
-  mixins: [QueryHelper],
-  components: {Forecast},
+  mixins: [
+    QueryHelper
+  ],
+  components: {
+    Forecast
+  },
   data () {
     return {
       timer: null,
@@ -50,10 +54,10 @@ export default {
     }
   },
   methods: {
-    getForecast: function (cb) {
+    getForecast (cb) {
       const request = new XMLHttpRequest()
       request.timeout = 5000  // 5 seconds
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
@@ -67,7 +71,7 @@ export default {
     },
     // There are many more weather conditions reported than we have icons for.
     // This function collapses the codes into a few reasonable icon classes.
-    getIconClass: function (weatherCode) {
+    getIconClass (weatherCode) {
     // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
       weatherCode = parseInt(weatherCode)
       switch (weatherCode) {
@@ -130,7 +134,7 @@ export default {
           return 'partly-cloudy-day'
       }
     },
-    angleToDirection: function (angle) {
+    angleToDirection (angle) {
       const direction = ['North', 'NNE', 'NE', 'ENE', 'East', 'ESE', 'SE',
         'SSE', 'South', 'SSW', 'SW', 'WSW', 'West', 'WNW', 'NW', 'NNW']
       const count = direction.length
@@ -138,7 +142,7 @@ export default {
       const index = Math.ceil(angle / (360 / count)) % 16
       return direction[index]
     },
-    refreshForecast: function () {
+    refreshForecast () {
       this.getForecast(data => {
         this.icon = 'icon ' + this.getIconClass(data.channel.item.condition.code)
         this.temp = data.channel.item.condition.temp

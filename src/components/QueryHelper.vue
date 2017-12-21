@@ -15,16 +15,16 @@ export default {
     }
   },
   methods: {
-    getCoords: function () {
+    getCoords () {
       return `coords=${this.latitude},${this.longitude}`
     },
-    getHeight: function () {
+    getHeight () {
       return `height=${this.altitude}`
     },
-    getTimeZone: function () {
+    getTimeZone () {
       return `tz=${this.tz}`
     },
-    getUtcTime: function () {
+    getUtcTime () {
       const now = new Date()
       const hours = now.getUTCHours()
       const minutes = now.getUTCMinutes()
@@ -33,24 +33,24 @@ export default {
     // Using 'today' for date uses UTC.  This retruns the string for today,
     // in a format like: '12/16/2017'.
     // Uses date supplied, or current date.
-    getDateString: function (date) {
+    getDateString (date) {
       const now = date || new Date()
       return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     // Astronomy API
-    getEarthPictUrl: function () {
+    getEarthPictUrl () {
       return `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
     },
-    getMoonPhaseImageUrl: function () {
+    getMoonPhaseImageUrl () {
       return `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
     },
-    getSiderealTimeUrl: function () {
+    getSiderealTimeUrl () {
       return `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&${this.getCoords()}&${this.getHeight()}`
     },
-    getSunMoonDataUrl: function () {
+    getSunMoonDataUrl () {
       return `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString()}&${this.getTimeZone()}&${this.getCoords()}`
     },
-    getWeatherUrl: function () {
+    getWeatherUrl () {
       return `https://query.yahooapis.com/v1/public/yql?format=json&q=select%20*%20from%20weather.forecast%20where%20woeid=${this.woeid}`
     }
   }

@@ -15,7 +15,9 @@ const sidDelay = 1000 * 60  // Check once a minute to see if Sidereal Time needs
 
 export default {
   name: 'SkyClock',
-  mixins: [QueryHelper],
+  mixins: [
+    QueryHelper
+  ],
   data () {
     const never = new Date(0, 0, 0, 0, 0, 0)
     return {
@@ -160,7 +162,7 @@ export default {
     getSiderialTime (cb) {
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)

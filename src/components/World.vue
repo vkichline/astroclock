@@ -29,7 +29,15 @@ const timerDelay = 1000 * 60 * 15   // Refresh image every 15 minutes
 //
 export default {
   name: 'World',
-  mixins: [QueryHelper],
+  mixins: [
+    QueryHelper
+  ],
+  components: {
+    ClockFace,
+    MoonPhase,
+    WeatherStatus,
+    SkyClock
+  },
   data () {
     return {
       timer: null,
@@ -37,12 +45,6 @@ export default {
       bg2: null,
       phase: true
     }
-  },
-  components: {
-    ClockFace,
-    MoonPhase,
-    WeatherStatus,
-    SkyClock
   },
   mounted () {
     this.phase = true
@@ -63,13 +65,13 @@ export default {
   methods: {
     // Periodically set the src attribute of the image at the bottom of the stack so its updated.
     // The image will fire the onload event when its complete.
-    periodic: function () {
+    periodic () {
       const elem = this.phase ? this.bg1 : this.bg2
       elem.src = this.getEarthPictUrl()
     },
     // When a new image has been downloaded and onload fires, switch the zorder of the two images,
     // and toggle the phase variable.
-    change: function () {
+    change () {
       this.phase = !this.phase
       if (this.bg1 && this.bg2) {
         if (this.phase) {
