@@ -7,6 +7,7 @@
 </template>
 
 <script>
+import QueryHelper from './QueryHelper'
 
 const faceDelay = 1000 * 60 // Check once a minute to see if background face needs redraw
 const todDelay = 1000 * 60  // Check once a minute to see it time of day needs update
@@ -14,6 +15,9 @@ const sidDelay = 1000 * 60  // Check once a minute to see if Sidereal Time needs
 
 export default {
   name: 'SkyClock',
+  mixins: [
+    QueryHelper
+  ],
   data () {
     const never = new Date(0, 0, 0, 0, 0, 0)
     return {
@@ -156,10 +160,9 @@ export default {
       return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     getSiderialTime (cb) {
-      const url = `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&loc=Kirkland,%20WA`
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
@@ -173,7 +176,7 @@ export default {
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getSiderealTimeUrl())
       request.send()
     },
     // API Sun/Moon data always refers to today, and time is
@@ -201,28 +204,49 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      const url = `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString(now)}&loc=Kirkland,%20WA`
       const request = new XMLHttpRequest()
       request.timeout = 5000 // 5 second timeout
-      const that = this
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
             const results = []
-            results[0] = that.getDateFromSunMoonData(now, response.moondata[0].time)
-            results[1] = that.getDateFromSunMoonData(now, response.moondata[1].time)
-            results[2] = that.getDateFromSunMoonData(now, response.moondata[2].time)
-            results[3] = that.getDateFromSunMoonData(now, response.sundata[0].time)
-            results[4] = that.getDateFromSunMoonData(now, response.sundata[1].time)
-            results[5] = that.getDateFromSunMoonData(now, response.sundata[2].time)
-            results[6] = that.getDateFromSunMoonData(now, response.sundata[3].time)
-            results[7] = that.getDateFromSunMoonData(now, response.sundata[4].time)
+            // The elements of sundata and moondata are not necessarily in any order
+            for (const dat of response.moondata) {
+              switch (dat.phen) {
+                case 'R': results[0] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'U': results[1] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'S': results[2] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                default:
+                  console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
+                  break
+              }
+            }
+            for (const dat of response.sundata) {
+              switch (dat.phen) {
+                case 'BC': results[3] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'R': results[4] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'U': results[5] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'S': results[6] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                case 'EC': results[7] = this.getDateFromSunMoonData(now, dat.time)
+                  break
+                default:
+                  console.log(`Error in case satement: ${dat.phen} is inot in: BC, R, U, S, EC.`)
+                  break
+              }
+            }
             cb(results)
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getSunMoonDataUrl())
       request.send()
     },
     updateFace () {
@@ -232,11 +256,10 @@ export default {
         this.lastFaceUpdate = now
         this.drawLines('#444')
         this.drawClockFace('#000')
-        const that = this
-        this.getSunMoonData(now, function (data) {
-          that.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
-          that.drawLines('#444')
-          that.drawClockFace('#fff')
+        this.getSunMoonData(now, data => {
+          this.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
+          this.drawLines('#444')
+          this.drawClockFace('#fff')
         })
       }
     },
@@ -253,9 +276,8 @@ export default {
       // Redraw the time of day if more than 5 minutes has passed
       if (now - this.lastSidUpdate > 300000) {
         this.lastSidUpdate = now
-        const that = this
-        this.getSiderialTime(function (sidTime) {
-          that.drawTime(that.sid, sidTime, 'rgb(0, 255, 255)', 1)
+        this.getSiderialTime(sidTime => {
+          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 1)
         })
       }
     }

@@ -26,9 +26,8 @@ export default {
     }
   },
   mounted () {
-    const that = this
     this.timer = window.setInterval(() => {
-      that.parts = that.getTimeParts(new Date())
+      this.parts = this.getTimeParts(new Date())
     }, timeDelay)
   },
   beforeDestroy () {
@@ -44,22 +43,22 @@ export default {
       const minutes = time.getMinutes()
       const seconds = time.getSeconds()
       let hours = time.getHours()
-      const ispm = hours >= 12
+      const isPM = hours >= 12
       hours = (hours > 12) ? hours - 12 : hours
       hours = (hours === 0) ? 12 : hours
       const hhmm = `${hours}:${((minutes < 10) ? '0' + minutes : minutes)}`
       const ss = (seconds < 10) ? '0' + seconds : seconds.toString()
-      const suffix = ispm ? 'PM' : 'AM'
+      const suffix = isPM ? 'PM' : 'AM'
       const dow = days[time.getDay()]
       const mdy = `${months[time.getMonth()]} ${time.getDate()}, ${time.getFullYear()}`
       return {
-        hhmm: hhmm,
-        ss: ss,
-        suffix: suffix,
-        full: `${hhmm}:${ss} ${suffix}`,
-        dow: dow,
-        mdy: mdy,
-        isPM: ispm
+        hhmm,
+        ss,
+        suffix,
+        dow,
+        mdy,
+        isPM,
+        full: `${hhmm}:${ss} ${suffix}`
       }
     }
   }

@@ -12,7 +12,9 @@
 // This component displays one day's forecast.  An array of these is set up by WeatherStatus.
 
 export default {
-  props: [ 'fcdata' ]
+  props: [
+    'fcdata'
+  ]
 }
 </script>
 

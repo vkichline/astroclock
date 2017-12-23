@@ -18,6 +18,7 @@
 <script>
 
 import Forecast from './Forecast'
+import QueryHelper from './QueryHelper'
 
 const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 
@@ -28,6 +29,9 @@ const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 //
 export default {
   name: 'WeatherStatus',
+  mixins: [
+    QueryHelper
+  ],
   components: {
     Forecast
   },
@@ -50,13 +54,10 @@ export default {
     }
   },
   methods: {
-    getForecast: function (cb) {
-      const statement = 'select * from weather.forecast where woeid=' + '2433074'
-      const url = `https://query.yahooapis.com/v1/public/yql?format=json&q=${statement}`
-
+    getForecast (cb) {
       const request = new XMLHttpRequest()
       request.timeout = 5000  // 5 seconds
-      request.onreadystatechange = function () {
+      request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
@@ -65,12 +66,12 @@ export default {
           }
         }
       }
-      request.open('GET', url)
+      request.open('GET', this.getWeatherUrl())
       request.send()
     },
     // There are many more weather conditions reported than we have icons for.
     // This function collapses the codes into a few reasonable icon classes.
-    getIconClass: function (weatherCode) {
+    getIconClass (weatherCode) {
     // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
       weatherCode = parseInt(weatherCode)
       switch (weatherCode) {
@@ -133,7 +134,7 @@ export default {
           return 'partly-cloudy-day'
       }
     },
-    angleToDirection: function (angle) {
+    angleToDirection (angle) {
       const direction = ['North', 'NNE', 'NE', 'ENE', 'East', 'ESE', 'SE',
         'SSE', 'South', 'SSW', 'SW', 'WSW', 'West', 'WNW', 'NW', 'NNW']
       const count = direction.length
@@ -141,24 +142,23 @@ export default {
       const index = Math.ceil(angle / (360 / count)) % 16
       return direction[index]
     },
-    refreshForecast: function () {
-      const that = this
-      this.getForecast(function (data) {
-        that.icon = 'icon ' + that.getIconClass(data.channel.item.condition.code)
-        that.temp = data.channel.item.condition.temp
+    refreshForecast () {
+      this.getForecast(data => {
+        this.icon = 'icon ' + this.getIconClass(data.channel.item.condition.code)
+        this.temp = data.channel.item.condition.temp
         const fc = data.channel.item.forecast[0]
         const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
-        const forecast = `${fc.text}, wind from ${that.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
-        that.todaysForecast = forecast
+        const forecast = `${fc.text}, wind from ${this.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
+        this.todaysForecast = forecast
         const arr = [{}, {}, {}, {}, {}]
         for (let i = 0; i < 5; i++) {
           arr[i].day = data.channel.item.forecast[i + 1].day
           arr[i].low = data.channel.item.forecast[i + 1].low
           arr[i].high = data.channel.item.forecast[i + 1].high
-          arr[i].icon = `icon ${that.getIconClass(data.channel.item.forecast[i + 1].code)}`
+          arr[i].icon = `icon ${this.getIconClass(data.channel.item.forecast[i + 1].code)}`
           arr[i].text = data.channel.item.forecast[i + 1].text
         }
-        that.dailyForecasts = arr
+        this.dailyForecasts = arr
       })
     }
   }
