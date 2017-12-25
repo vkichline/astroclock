@@ -225,6 +225,12 @@ export default {
                   break
               }
             }
+            // This became necessary on Christmas day 2017. TBD: Why?
+            for (const dat of response.nextmoondata) {
+              if (dat.phen === 'S') {
+                results[2] = this.getDateFromSunMoonData(now, dat.time)
+              }
+            }
             for (const dat of response.sundata) {
               switch (dat.phen) {
                 case 'BC': results[3] = this.getDateFromSunMoonData(now, dat.time)
