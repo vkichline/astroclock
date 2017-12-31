@@ -17,7 +17,7 @@ export default {
       const now = new Date()
       const hours = now.getUTCHours()
       const minutes = now.getUTCMinutes()
-      return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
+      return `${hours < 10 ? '0' + hours : hours}:${minutes < 10 ? '0' + minutes : minutes}`
     },
     // Using 'today' for date uses UTC.  This retruns the string for today,
     // in a format like: '12/16/2017'.
