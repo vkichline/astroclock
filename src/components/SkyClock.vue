@@ -212,47 +212,53 @@ export default {
             const response = JSON.parse(request.response)
             const results = []
             // The elements of sundata and moondata are not necessarily in any order
-            for (const dat of response.moondata) {
-              switch (dat.phen) {
-                case 'R': results[0] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'U': results[1] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'S': results[2] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                default:
-                  console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
-                  break
+            if (typeof response.moondata !== 'undefined') {
+              for (const dat of response.moondata) {
+                switch (dat.phen) {
+                  case 'R': results[0] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'U': results[1] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'S': results[2] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  default:
+                    console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
+                    break
+                }
               }
             }
-            for (const dat of response.nextmoondata) {
-              switch (dat.phen) {
-                case 'R': results[0] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'U': results[1] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'S': results[2] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                default:
-                  console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
-                  break
+            if (typeof response.nextmoondata !== 'undefined') {
+              for (const dat of response.nextmoondata) {
+                switch (dat.phen) {
+                  case 'R': results[0] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'U': results[1] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'S': results[2] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  default:
+                    console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
+                    break
+                }
               }
             }
-            for (const dat of response.sundata) {
-              switch (dat.phen) {
-                case 'BC': results[3] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'R': results[4] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'U': results[5] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'S': results[6] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                case 'EC': results[7] = this.getDateFromSunMoonData(now, dat.time)
-                  break
-                default:
-                  console.log(`Error in case satement: ${dat.phen} is inot in: BC, R, U, S, EC.`)
-                  break
+            if (typeof response.sundata !== 'undefined') {
+              for (const dat of response.sundata) {
+                switch (dat.phen) {
+                  case 'BC': results[3] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'R': results[4] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'U': results[5] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'S': results[6] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  case 'EC': results[7] = this.getDateFromSunMoonData(now, dat.time)
+                    break
+                  default:
+                    console.log(`Error in case satement: ${dat.phen} is not in: BC, R, U, S, EC.`)
+                    break
+                }
               }
             }
             cb(results)
