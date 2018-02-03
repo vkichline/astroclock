@@ -57,6 +57,7 @@ export default {
       const ctx = this.face.getContext('2d')
       const centerX = this.size / 2
       const centerY = this.size / 2
+      ctx.clearRect(0, 0, this.width, this.height)
       ctx.beginPath()
       ctx.strokeStyle = color
       ctx.lineWidth = 1
