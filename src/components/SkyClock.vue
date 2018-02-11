@@ -114,6 +114,7 @@ export default {
       const centerX = this.size / 2
       const centerY = this.size / 2
       const ctx = element.getContext('2d')
+      ctx.clearRect(0, 0, element.width, element.height)
       ctx.beginPath()
       ctx.strokeStyle = color
       ctx.lineWidth = width
