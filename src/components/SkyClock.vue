@@ -84,6 +84,10 @@ export default {
       }
       ctx.stroke()
     },
+    clearClockFace () {
+      const ctx = this.face.getContext('2d')
+      ctx.clearRect(0, 0, this.size, this.size)
+    },
     drawClockFace (color) {
       const fudge = [0.0, 0.0, -0.01, -0.01, -0.01, -0.005, // 18 - 23
         -0.04, -0.02, -0.02, -0.015, -0.01, -0.005,         // 0 - 5
@@ -111,7 +115,6 @@ export default {
       const centerY = this.size / 2
       const ctx = element.getContext('2d')
       ctx.beginPath()
-      ctx.clearRect(0, 0, this.size, this.size)
       ctx.strokeStyle = color
       ctx.lineWidth = width
       let part = (time.getHours() * 60.0 + time.getMinutes()) / 1440.0
@@ -274,8 +277,8 @@ export default {
       // Redraw the face if the day has changed
       if (now.toDateString() !== this.lastFaceUpdate.toDateString()) {
         this.lastFaceUpdate = now
+        this.clearClockFace()
         this.drawLines('#444')
-        this.drawClockFace('#000')
         this.getSunMoonData(now, data => {
           this.drawSunMoonInfo(data[0], data[2], data[3], data[4], data[6], data[7])
           this.drawLines('#444')
