@@ -151,10 +151,10 @@ export default {
     },
     drawSunMoonInfo (moonRise, moonSet, soct, sunRise, sunSet, eoct) {
       const r = (this.size / 2) * 0.7
-      this.drawWedge(soct, sunRise, r, 'rgba(125, 206, 250, 0.6)')
-      this.drawWedge(sunRise, sunSet, r, 'rgba(125, 206, 250)')
-      this.drawWedge(sunSet, eoct, r, 'rgba(125, 206, 250, 0.6)')
-      this.drawWedge(moonRise, moonSet, (this.size / 4), 'rgba(255, 255, 150, 0.75)')
+      this.drawWedge(soct, sunRise, r, 'rgba(100, 150, 250, 0.6)')
+      this.drawWedge(sunRise, sunSet, r, 'rgba(75, 156, 250)')
+      this.drawWedge(sunSet, eoct, r, 'rgba(100, 150, 250, 0.6)')
+      this.drawWedge(moonRise, moonSet, (this.size / 4), 'rgba(255, 255, 0, 0.7)')
     },
     // Using 'today' for date uses UTC.  This retruns the string for today,
     // in a format like: '12/16/2017'.
