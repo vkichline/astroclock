@@ -23,9 +23,7 @@ import QueryHelper from './QueryHelper'
 const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 
 // This component diplays the current temperature and weather conditions, plus the forecast for the next 5 days.
-// Data is downloaded from the Yahoo weather API.  Icons are displayed by translating a code into an
-// appropriate clase name, and the background image of a div is set to that class.  CSS has class defs with
-// base64-encoded icons.  (Works best when served directly from file system.)
+// Data is downloaded from the NWS weather API.
 //
 export default {
   name: 'WeatherStatus',
@@ -61,7 +59,7 @@ export default {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
             const response = JSON.parse(request.response)
-            const results = response.query.results
+            const results = response.properties
             cb(results)
           }
         }
@@ -69,94 +67,23 @@ export default {
       request.open('GET', this.getWeatherUrl())
       request.send()
     },
-    // There are many more weather conditions reported than we have icons for.
-    // This function collapses the codes into a few reasonable icon classes.
-    getIconClass (weatherCode) {
-    // Weather codes: https://developer.yahoo.com/weather/documentation.html#codes
-      weatherCode = parseInt(weatherCode)
-      switch (weatherCode) {
-        case 25: // cold
-        case 32: // sunny
-        case 33: // fair (night)
-        case 34: // fair (day)
-        case 36: // hot
-        case 3200: // not available
-          return 'clear-day'
-        case 0: // tornado
-        case 1: // tropical storm
-        case 2: // hurricane
-        case 6: // mixed rain and sleet
-        case 8: // freezing drizzle
-        case 9: // drizzle
-        case 10: // freezing rain
-        case 11: // showers
-        case 12: // showers
-        case 17: // hail
-        case 35: // mixed rain and hail
-        case 39: // scattered showers
-        case 40: // scattered showers
-          return 'rain'
-        case 3: // severe thunderstorms
-        case 4: // thunderstorms
-        case 37: // isolated thunderstorms
-        case 38: // scattered thunderstorms
-        case 45: // thundershowers
-        case 47: // isolated thundershowers
-          return 'thunderstorms'
-        case 5: // mixed rain and snow
-        case 7: // mixed snow and sleet
-        case 13: // snow flurries
-        case 14: // light snow showers
-        case 16: // snow
-        case 18: // sleet
-        case 41: // heavy snow
-        case 42: // scattered snow showers
-        case 43: // heavy snow
-        case 46: // snow showers
-          return 'snow'
-        case 15: // blowing snow
-        case 19: // dust
-        case 20: // foggy
-        case 21: // haze
-        case 22: // smoky
-          return 'fog'
-        case 24: // windy
-        case 23: // blustery
-          return 'windy'
-        case 26: // cloudy
-        case 27: // mostly cloudy (night)
-        case 28: // mostly cloudy (day)
-        case 31: // clear (night)
-          return 'cloudy'
-        case 29: // partly cloudy (night)
-        case 30: // partly cloudy (day)
-        case 44: // partly cloudy
-          return 'partly-cloudy-day'
-      }
-    },
-    angleToDirection (angle) {
-      const direction = ['North', 'NNE', 'NE', 'ENE', 'East', 'ESE', 'SE',
-        'SSE', 'South', 'SSW', 'SW', 'WSW', 'West', 'WNW', 'NW', 'NNW']
-      const count = direction.length
-      angle = (angle - (360 / count / 2) + 360) % 360 // set back half a division
-      const index = Math.ceil(angle / (360 / count)) % 16
-      return direction[index]
-    },
     refreshForecast () {
       this.getForecast(data => {
-        this.icon = 'icon ' + this.getIconClass(data.channel.item.condition.code)
-        this.temp = data.channel.item.condition.temp
-        const fc = data.channel.item.forecast[0]
-        const windSpeed = Math.round(data.channel.wind.speed / 1.60934)
-        const forecast = `${fc.text}, wind from ${this.angleToDirection(data.channel.wind.direction)} at ${windSpeed} mph. Low ${fc.low}°, High ${fc.high}°.`
-        this.todaysForecast = forecast
+        let current = data.periods[0]
+        this.icon = current.icon
+        this.temp = current.temperature
+        // Should we skip one? forecasts have day and noght parts for each day.
+        this.todaysForecast = current.detailedForecast
         const arr = [{}, {}, {}, {}, {}]
-        for (let i = 0; i < 5; i++) {
-          arr[i].day = data.channel.item.forecast[i + 1].day
-          arr[i].low = data.channel.item.forecast[i + 1].low
-          arr[i].high = data.channel.item.forecast[i + 1].high
-          arr[i].icon = `icon ${this.getIconClass(data.channel.item.forecast[i + 1].code)}`
-          arr[i].text = data.channel.item.forecast[i + 1].text
+        let offset = current.isDayTime ? 1 : 2
+        for (let i = 0, pos = offset; i < 5; pos += 2, i++) {
+          let dayTemp = data.periods[pos].temperature
+          let nightTemp = data.periods[pos + 1].temperature
+          arr[i].day = data.periods[pos].name
+          arr[i].low = (dayTemp < nightTemp) ? dayTemp : nightTemp
+          arr[i].high = (dayTemp > nightTemp) ? dayTemp : nightTemp
+          arr[i].icon = data.periods[pos].icon
+          arr[i].text = data.periods[pos].shortForecast
         }
         this.dailyForecasts = arr
       })
@@ -167,11 +94,11 @@ export default {
 
 <style lang="scss" scoped>
 @import "./_globals.scss";
-@import "./_icons.scss";
 
 #todays-forecast {
   font-family: sans-serif;
-  font-size: 75%;
+  font-size: 50%;
+  width: 80%;
   color: $fgcolor;
   text-shadow: 2px 2px 4px #000000;
   padding-top: 0.25em;

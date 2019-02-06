@@ -40,7 +40,7 @@ export default {
       return `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString()}&${this.getTimeZone()}&${this.getCoords()}`
     },
     getWeatherUrl () {
-      return `https://query.yahooapis.com/v1/public/yql?format=json&q=select%20*%20from%20weather.forecast%20where%20woeid=${clockLocation.woeid}`
+      return `https://api.weather.gov/gridpoints/${clockLocation.nws_station}/forecast`
     }
   }
 }

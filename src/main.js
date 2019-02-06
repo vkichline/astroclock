@@ -13,15 +13,15 @@ Vue.config.strict = true
 //
 export const clockLocation = new Vue({
   data: {
-    latitude: '47.725',
-    longitude: '-122.180053',
+    latitude: '47.725430',
+    longitude: '-122.180099',
     altitude: '93',
     tz: (function () {
       let d = new Date()
       let diff = -(d.getTimezoneOffset() / 60)
       return diff.toString()
     })(),
-    woeid: '2433074'  // Kirkland, WA (for Yahoo weather API)
+    nws_station: 'SEW/130,72' // Kirkland, WA (for NWS weather API)
   }
 })
 
