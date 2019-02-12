@@ -380,7 +380,7 @@ canvas {
   z-index: 1;
 }
 
-#tod {
+#sid {
   background-color: transparent;
   z-index: 2;
 }

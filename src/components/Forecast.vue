@@ -24,11 +24,11 @@ export default {
     padding: 8px;
     margin: 4px;
     display: inline-block;
-    font-size: 30%;
+    font-size: 40%;
     height: 150px;
     width: 150px;
     border-radius: 16px;
-    border: 1px black solid;
+    border: 1px #444 solid;
     vertical-align: top;
     background: rgba(0, 0, 0, 0.3);
     background-repeat: no-repeat;

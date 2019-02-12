@@ -99,10 +99,11 @@ export default {
           arr[i].low = (dayTemp < nightTemp) ? dayTemp : nightTemp
           arr[i].high = (dayTemp > nightTemp) ? dayTemp : nightTemp
           arr[i].text = data.data.weather[pos]
+          // NOTE: the NWS icons don't seem to work well with this design.  Eliminating.
           // the URL ends with 'size=medium'. If found, replace it with 'size=large'
-          let iconUrl = data.data.iconLink[pos]
-          iconUrl = iconUrl.replace('size=medium', 'size=large')
-          arr[i].icon = iconUrl
+          // let iconUrl = data.data.iconLink[pos]
+          // iconUrl = iconUrl.replace('size=medium', 'size=large')
+          // arr[i].icon = iconUrl
         }
         this.dailyForecasts = arr
       })
