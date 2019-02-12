@@ -20,6 +20,7 @@ export default {
 @import "./_globals.scss";
 
 .forecast {
+    font-family: sans-serif;
     text-shadow: 3px 3px 4px black;
     padding: 8px;
     margin: 4px;
@@ -36,6 +37,7 @@ export default {
 }
 
 .forecast .description {
+    font-size: 90%;
     color: $fgcolor;
     margin-left: auto;
     margin-right: auto;
@@ -45,12 +47,13 @@ export default {
 }
 
 .forecast div {
-    display: inline-block;
+    font-size: 150%;
     color: white;
     margin-left: auto;
     margin-right: auto;
     padding: 2px 8px;
     border-radius: 1em;
     margin-bottom: .5em;
+    height: 50px;
 }
 </style>

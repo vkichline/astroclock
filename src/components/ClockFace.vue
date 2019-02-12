@@ -75,7 +75,7 @@ $fontsize: 400%;
   text-shadow: 2px 2px 4px #000000;
   text-align: center;
   color: $fgcolor;
-  margin-top: 1em;
+  margin-top: .5em;
 }
 
 .clock-face .time {
