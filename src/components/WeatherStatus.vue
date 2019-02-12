@@ -6,20 +6,20 @@
     </div>
     <div id="todays-forecast">{{ todaysForecast }}</div>
     <div class="forecasts">
-      <Forecast :fcdata="dailyForecasts[0]" />
-      <Forecast :fcdata="dailyForecasts[1]" />
-      <Forecast :fcdata="dailyForecasts[2]" />
-      <Forecast :fcdata="dailyForecasts[3]" />
-      <Forecast :fcdata="dailyForecasts[4]" />
+      <Forecast :fcdata="dailyForecasts[0]"/>
+      <Forecast :fcdata="dailyForecasts[1]"/>
+      <Forecast :fcdata="dailyForecasts[2]"/>
+      <Forecast :fcdata="dailyForecasts[3]"/>
+      <Forecast :fcdata="dailyForecasts[4]"/>
     </div>
   </div>
 </template>
 
 <script>
-
 import Forecast from './Forecast'
 import QueryHelper from './QueryHelper'
 
+const https = require('https')
 const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 
 // This component diplays the current temperature and weather conditions, plus the forecast for the next 5 days.
@@ -27,12 +27,11 @@ const timerDelay = 1000 * 60 * 60 // Refresh weather status every hour
 //
 export default {
   name: 'WeatherStatus',
-  mixins: [
-    QueryHelper
-  ],
+  mixins: [QueryHelper],
   components: {
     Forecast
   },
+  verbose: false,
   data () {
     return {
       timer: null,
@@ -52,38 +51,55 @@ export default {
     }
   },
   methods: {
+    // Options represents the service to call, cb is a callback function taking one parameter; the JSON object
     getForecast (cb) {
-      const request = new XMLHttpRequest()
-      request.timeout = 5000  // 5 seconds
-      request.onreadystatechange = () => {
-        if (request.readyState === XMLHttpRequest.DONE) {
-          if (request.status === 200) {
-            const response = JSON.parse(request.response)
-            const results = response.properties
-            cb(results)
-          }
-        }
-      }
-      request.open('GET', this.getWeatherUrl())
-      request.send()
+      https
+        .get(this.getWeatherOptions(), resp => {
+          let data = ''
+          // A chunk of data has been recieved.
+          resp.on('data', chunk => {
+            if (this.verbose) console.log('Data: ', chunk.length)
+            data += chunk
+          })
+          // The whole response has been received. Print out the result.
+          resp.on('end', () => {
+            if (this.verbose) console.log('End: ', data.length)
+            let json = JSON.parse(data)
+            cb(json)
+          })
+        })
+        .on('error', err => {
+          console.error('Error: ' + err.message)
+        })
     },
     refreshForecast () {
       this.getForecast(data => {
-        let current = data.periods[0]
-        this.icon = current.icon
-        this.temp = current.temperature
+        let current = data.currentobservation
+        this.temp = current.Temp
         // Should we skip one? forecasts have day and noght parts for each day.
-        this.todaysForecast = current.detailedForecast
+        this.todaysForecast =
+          'Humidity = ' + current.Relh +
+          '%, Barometer = ' + current.SLP +
+          'InHg'
+        this.todaysForecast += ' Wind speed = ' + current.Winds
+        if (current.windDirection) {
+          this.todaysForecast += ' from ' + current.Windd
+        }
+        // startValidTime[0] will be today's date in the evening.
+        // startValidTime[1] will also be if it's before evening.
+
         const arr = [{}, {}, {}, {}, {}]
-        let offset = current.isDayTime ? 1 : 2
+        let curDate = new Date()
+        let date2 = new Date(data.time.startValidTime[1])
+        let offset = curDate.getDay() === date2.getDay() ? 2 : 1
         for (let i = 0, pos = offset; i < 5; pos += 2, i++) {
-          let dayTemp = data.periods[pos].temperature
-          let nightTemp = data.periods[pos + 1].temperature
-          arr[i].day = data.periods[pos].name
+          let dayTemp = data.data.temperature[pos]
+          let nightTemp = data.data.temperature[pos + 1]
+          arr[i].day = data.time.startPeriodName[pos]
           arr[i].low = (dayTemp < nightTemp) ? dayTemp : nightTemp
           arr[i].high = (dayTemp > nightTemp) ? dayTemp : nightTemp
-          arr[i].icon = data.periods[pos].icon
-          arr[i].text = data.periods[pos].shortForecast
+          arr[i].icon = data.data.iconLink[pos]
+          arr[i].text = data.data.weather[pos]
         }
         this.dailyForecasts = arr
       })

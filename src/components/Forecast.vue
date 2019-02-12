@@ -1,8 +1,6 @@
 <template>
     <div class="forecast" v-bind:style="{ backgroundImage: 'url(' + fcdata.icon + ')' }">
-        <div>{{ fcdata.day }}</div>
-        <br/>
-        <div>{{ fcdata.low }}&deg; / {{ fcdata.high }}&deg;</div>
+        <div>{{ fcdata.day }} {{ fcdata.low }}&deg;/{{ fcdata.high }}&deg;</div>
         <div class="description">{{ fcdata.text }}</div>
     </div>
 </template>
@@ -38,20 +36,20 @@ export default {
 }
 
 .forecast .description {
-    display: inline-block;
+    //display: inline-block;
     color: $fgcolor;
     background-color: rgba(0, 0, 0, 0.5);
     margin-left: auto;
     margin-right: auto;
     margin-top: 1em;
-    padding: 2px 8px;
+    padding: 4px 8px;
     border-radius: 1em;
 }
 
 .forecast div {
     display: inline-block;
     color: black;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgb(255, 255, 255);
     margin-left: auto;
     margin-right: auto;
     padding: 2px 8px;

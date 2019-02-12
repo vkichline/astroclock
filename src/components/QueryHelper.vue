@@ -39,8 +39,12 @@ export default {
     getSunMoonDataUrl () {
       return `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString()}&${this.getTimeZone()}&${this.getCoords()}`
     },
-    getWeatherUrl () {
-      return `https://api.weather.gov/gridpoints/${clockLocation.nws_station}/forecast`
+    getWeatherOptions () {
+      return {
+        hostname: 'forecast.weather.gov',
+        path: '/MapClick.php?&lat=47.71&lon=-122.21&zip=98034&FcstType=json',
+        headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
+      }
     }
   }
 }
