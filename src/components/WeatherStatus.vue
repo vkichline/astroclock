@@ -78,10 +78,10 @@ export default {
         this.temp = current.Temp
         // Should we skip one? forecasts have day and noght parts for each day.
         this.todaysForecast =
-          'Humidity = ' + current.Relh +
-          '%, Barometer = ' + current.SLP +
-          'InHg'
-        this.todaysForecast += ' Wind speed = ' + current.Winds
+          'Humidity ' + current.Relh +
+          '%, Barometer ' + current.SLP +
+          ' inHg, '
+        this.todaysForecast += ('Wind speed ' + current.Winds + ' mph')
         if (current.windDirection) {
           this.todaysForecast += ' from ' + current.Windd
         }
@@ -117,7 +117,7 @@ export default {
 
 #todays-forecast {
   font-family: sans-serif;
-  font-size: 50%;
+  font-size: 75%;
   width: 80%;
   color: $fgcolor;
   text-shadow: 2px 2px 4px #000000;
