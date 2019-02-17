@@ -47,7 +47,6 @@ export default {
 }
 
 .forecast div {
-    font-size: 150%;
     color: white;
     margin-left: auto;
     margin-right: auto;

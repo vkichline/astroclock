@@ -198,6 +198,18 @@ export default {
       return new Date(today.getFullYear(), today.getMonth(),
         today.getDate(), hours, minutes, 0)
     },
+    makeGetOptions (date) {
+      let apiOptions = {
+        hostname: 'api.usno.navy.mil',
+        path: '',
+        headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
+      }
+      let path = '/rstt/oneday?ID=KICHLINE&date=$DATE$&tz=-8&coords=47.725430,-122.180099'
+      let dateFormat = (date.getMonth() + 1) + '/' + date.getDate() + '/' + date.getFullYear()
+      path = path.replace('$DATE$', dateFormat)
+      apiOptions.path = path
+      return apiOptions
+    },
     // Create an array of Date objects, set to:
     //   [0] = MoonRise
     //   [1] = MoonTransit
@@ -210,13 +222,8 @@ export default {
     //  'now' is a Date object for today; all results are for today,
     //  the param reduces calls to new Date().
     getSunMoonData (now, cb) {
-      const apiOptions = {
-        hostname: 'api.usno.navy.mil',
-        path: '/rstt/oneday?ID=KICHLINE&date=2/11/2019&tz=-8&coords=47.725430,-122.180099',
-        headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
-      }
       let data = ''
-      https.get(apiOptions, (resp) => {
+      https.get(this.makeGetOptions(now), (resp) => {
         // A chunk of data has been recieved.
         resp.on('data', (chunk) => {
           if (this.verbose) console.log('Data: ', chunk.length)
