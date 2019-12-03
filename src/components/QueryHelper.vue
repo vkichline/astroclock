@@ -19,6 +19,12 @@ export default {
       const minutes = now.getUTCMinutes()
       return `${hours}:${minutes < 10 ? '0' + minutes : minutes}`
     },
+    getUtcDateTime () {
+      const now = new Date()
+      var str = now.toISOString()
+      str.replace('-', '')
+      return str.substr(0, 13)
+    },
     // Using 'today' for date uses UTC.  This retruns the string for today,
     // in a format like: '12/16/2017'.
     // Uses date supplied, or current date.
@@ -27,8 +33,11 @@ export default {
       return (now.getMonth() + 1) + '/' + now.getDate() + '/' + now.getFullYear()
     },
     // Astronomy API
+    // getEarthPictUrl () {
+    //   return `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
+    // },
     getEarthPictUrl () {
-      return `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
+      return `https://www.timeanddate.com/scripts/sunmap.php?iso=${this.getUtcTime()}&earth=1`
     },
     getMoonPhaseImageUrl () {
       return `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
@@ -42,8 +51,8 @@ export default {
     getWeatherOptions () {
       return {
         hostname: 'forecast.weather.gov',
-        path: '/MapClick.php?&lat=47.71&lon=-122.21&zip=98034&FcstType=json',
-        headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
+        path: '/MapClick.php?&lat=47.71&lon=-122.21&zip=98034&FcstType=json'//,
+        //headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
       }
     }
   }
