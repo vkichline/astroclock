@@ -51,8 +51,8 @@ export default {
     getWeatherOptions () {
       return {
         hostname: 'forecast.weather.gov',
-        path: '/MapClick.php?&lat=47.71&lon=-122.21&zip=98034&FcstType=json'//,
-        //headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
+        path: '/MapClick.php?&lat=47.71&lon=-122.21&zip=98034&FcstType=json'// ,
+        // headers: { 'user-agent': 'AstroClock. Contact vkichline@hotmail.com' }
       }
     }
   }
