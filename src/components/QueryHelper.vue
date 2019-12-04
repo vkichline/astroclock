@@ -43,7 +43,8 @@ export default {
       return `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
     },
     getSiderealTimeUrl () {
-      return `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&${this.getCoords()}&${this.getHeight()}`
+//      return `http://api.usno.navy.mil/sidtime?ID=KICHLINE&date=${this.getDateString()}&time=now&${this.getCoords()}&${this.getHeight()}`
+      return 'http://astroclock.local:8080/sidereal'
     },
     getSunMoonDataUrl () {
       return `http://api.usno.navy.mil/rstt/oneday?ID=KICHLINE&date=${this.getDateString()}&${this.getTimeZone()}&${this.getCoords()}`

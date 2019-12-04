@@ -172,13 +172,15 @@ export default {
       request.onreadystatechange = () => {
         if (request.readyState === XMLHttpRequest.DONE) {
           if (request.status === 200) {
-            const response = JSON.parse(request.response)
-            const results = response.properties.data[0]
-            const sid = results.last
-            const parts = sid.split('.')
-            const time = parts[0]
+            // const response = JSON.parse(request.response)
+            // const results = response.properties.data[0]
+            // const sid = results.last
+            // const parts = sid.split('.')
+            const now = new Date()
+            const time = request.response
             const tparts = time.split(':')
-            const date = new Date(results.year, results.month - 1, results.day, tparts[0], tparts[1], tparts[2])
+            // const date = new Date(results.year, results.month - 1, results.day, tparts[0], tparts[1], tparts[2])
+            const date = new Date(now.getFullYear(), now.getMonth(), now.getDate(), tparts[0], tparts[1], tparts[2])
             cb(date)
           }
         }
@@ -362,7 +364,7 @@ export default {
       if (now - this.lastSidUpdate > 300000) {
         this.lastSidUpdate = now
         this.getSiderialTime(sidTime => {
-          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 1)
+          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 2)
         })
       }
     }
