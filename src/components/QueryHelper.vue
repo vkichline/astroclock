@@ -37,7 +37,7 @@ export default {
     //   return `http://api.usno.navy.mil/imagery/earth.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
     // },
     getEarthPictUrl () {
-      return `https://www.timeanddate.com/scripts/sunmap.php?iso=${this.getUtcTime()}&earth=1`
+      return `https://www.timeanddate.com/scripts/sunmap.php?iso=${this.getUtcTime()}&earth=0`
     },
     getMoonPhaseImageUrl () {
       return `http://api.usno.navy.mil/imagery/moon.png?ID=KICHLINE&date=today&time=${this.getUtcTime()}`
