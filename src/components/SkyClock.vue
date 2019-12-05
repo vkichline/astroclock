@@ -364,7 +364,7 @@ export default {
       if (now - this.lastSidUpdate > 300000) {
         this.lastSidUpdate = now
         this.getSiderialTime(sidTime => {
-          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 2)
+          this.drawTime(this.sid, sidTime, 'rgb(0, 255, 255)', 1)
         })
       }
     }

@@ -196,7 +196,7 @@ export default {
       const elem = document.getElementById('moonPhaseImage')
       if (elem) {
         // elem.style.backgroundImage = `url(${this.getMoonPhaseImageUrl()})`
-        drawPlanetPhase(elem, illum, waxing, {diameter: 200, earthshine: 0.1, blur: 10, lightColour: '#9bf'})
+        drawPlanetPhase(elem, illum, waxing, {diameter: 180, earthshine: 0.1, blur: 10, lightColour: '#999'})
       }
     },
     refreshMoonImage () {
@@ -224,7 +224,7 @@ $curve: 1em;
 }
 
 .moon-phase #moonPhaseImage {
-  padding: 18px;
+  padding: 28px;
   height: 100%;
   width: 100%;
 }
